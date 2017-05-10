@@ -69,5 +69,35 @@ var BookFactory = function(name, time, type) {
 	}
 	return o;
 }
-var myBook = BookFactory('js', '2017', 'program');
-myBook.showMessage();
+//var myBook = BookFactory('js', '2017', 'program');
+//myBook.showMessage();
+
+//safe factory model
+var Factory=function(type, content){
+	if(this instanceof Factory){
+		var o = new this[type](content);
+		return o;
+	}else {
+		return new Factory(type, content)
+	}
+};
+Factory.prototype = {
+	js:function(content){
+		this.content=content;
+		//use 'content' to do something, create an dom which innerHTML is related to 'content' and so on
+		console.log('add js to some Dom');
+	},
+	java:function(content){
+		this.content=content;
+		console.log('add java to Dom');
+	},
+	php:function(content){
+		this.content=content;
+		console.log('add php to Dom');
+	}
+}
+
+var data=[{type:'js',content:'js is flexable!'},{type:'java', content: 'java is widely used!'}];
+for (var i = data.length - 1; i >= 0; i--) {
+	Factory(data[i].type, data[i].content);
+}
