@@ -1,0 +1,67 @@
+<script type="text/javascript">
+//use genetic algorithm to figure out a math function's maximum
+function GA(func, section, precision){
+	//produce 100 primary simple ramdomly
+	var simple=[];
+	for(var i=0;i<100;i++){
+		var rand = getRandom(section);
+		simple.push(rand.toFixed(precision));
+	}
+	//select 10 good simple
+	//maybe you can try every time just pick up one most max and repeat for 10 times
+	var gSimple = simple.sort((v1,v2)=>(func(v2)-func(v1))).slice(0,10);
+	//cross
+	var preSimple = gSimple.slice().map(v=>Number(v));
+	for(var j=0;j<50;j++){
+		var cSimple=[];
+		for(var i=0;i<5;i++){
+			//pick out two gSimple
+			var s1= gSimple[Math.floor(getRandom([0,10]))];
+			var s2=gSimple[Math.floor(getRandom([0,10]))];
+			//transform s1, s2 into binary
+			s1=(s1*Math.pow(10,precision)).toString(2);
+			s2=(s2*Math.pow(10,precision)).toString(2)
+			//produce cross section
+			var len = s1.length;
+			var cStart = Math.floor(getRandom([0,len]));
+			var cEnd = Math.floor(getRandom([cStart,len]));
+			//cross
+			//you should make sure that after crossing, result must at section!
+			var time=0;
+			do {
+				time++;
+				s1 = s1.split('');
+				s2 = s2.split('');
+				for (var i = cStart; i <= cEnd; i++) {
+					var temp = s1[i];
+					s1[i] = s2[i];
+					s2[i] = temp;
+				}
+				s1 = s1.join('');
+				s2 = s2.join('');
+			} while ((parseInt(s1,2)/Math.pow(10,precision) > section[1] || parseInt(s2,2)/Math.pow(10,precision) > section[1])&&time<500)
+			cSimple.push(parseInt(s1,2)/Math.pow(10,precision));
+			cSimple.push(parseInt(s2,2)/Math.pow(10,precision));
+		}
+		//pick out top 10 among currentSimple and previousSimple
+		cSimple = cSimple.concat(preSimple).sort(compare(func)).slice(0,10);
+		//record current result for the next circulation
+		preSimple=cSimple;
+		console.log(preSimple);
+	}
+	return preSimple.map(v=>func(v)).sort((v1,v2)=>(v2-v1))[0];
+}
+function getRandom(section){
+	return Math.random()*(section[1]-section[0])+section[0];
+}
+function compare(func){
+	return (v1,v2)=>(func(v2)-func(v1));
+}
+function f(x){
+	return x*x;
+}
+function g(x){
+	return -(x*x/2-5*x+10);
+}
+console.log(GA(g,[0,31],3));
+</script>
