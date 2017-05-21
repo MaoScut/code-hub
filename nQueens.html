@@ -1,0 +1,120 @@
+<script type="text/javascript">
+// n queens problem
+function nQueens(n) {
+	var result = [];
+	var k = 0;
+	result[k] = 0;
+	while (k >= 0) { //when k<0; there is no solution for this 'n'
+		result[k]++;
+		while (result[k] <= n && !place(result, k))
+			result[k]++; //find proper position for the current queen
+		if (result[k] <= n) {
+			if (k == n - 1) break; //the last queen is put at a proper position, end
+			else {
+				k++;
+				result[k] = 0; //turn to next queen and init her poosition
+			}
+		} else {
+			result[k] = 0; //before feedback, we should reset the position or it will influence next time we find proper position for her
+			k--;
+		}
+	}
+	return result;
+}
+//judge the current position is proper or not
+//k is the serial number of the queen
+//res is the array of a partial solution
+function place(res, k) {
+	var abs = Math.abs;
+	for (var i = 0; i < k; i++) {
+		if (res[i] == res[k] || abs(res[i] - res[k]) == abs(i - k))
+			return false;
+	}
+	return true;
+}
+
+// var start = Date.now();
+// var result = nQueens(30);
+// var end = Date.now();
+// console.log(result, end - start);
+
+function nQueens_1(n){
+	let pos = new Array(n);
+	//init pos, make sure one row has one queen
+	for(let i=0;i<n;i++){
+		pos[i]=i;
+	}
+	//mess pos
+	for(let i=0;i<n/2;i++){
+		let p1=getRandom(0,n);
+		let p2=getRandom(0,n);
+		let temp=pos[p1];
+		pos[p1]=pos[p2];
+		pos[p2]=temp;
+	}
+	let _pos=pos.slice();
+	//record every queen's conflict,shoud be caculate!
+	let conflictRec=new Array(n);
+	let firstTime=true;
+	do{
+		if(arrayIsEqual(_pos,pos)&&!firstTime) return false;
+		firstTime=false;
+		pos=_pos.slice();
+		for(let i=0;i<n;i++){
+			let rowConflict=new Array(n);
+			for(let j=0;j<n;j++){
+				rowConflict[j]=getCeilConflict(i,j,_pos);
+			}
+			let minIndexArr=getMinIndex(rowConflict);
+			let index=getRandom(0,minIndexArr.length);
+			_pos[i]=minIndexArr[index];
+			conflictRec[i]=rowConflict[minIndexArr[0]];
+		}
+	}while(!conflictRec.every(v=>v==0))
+	return _pos;
+}
+
+//return int random at [low,high)
+function getRandom(low,high){
+	let rand=Math.random()*(high-low)+low;
+	return Math.floor(rand);
+}
+function isConflicting(pos){}
+function arrayIsEqual(a1,a2){
+	if(a1.length!=a2.length) return false;
+	for (var i = a1.length - 1; i >= 0; i--) {
+		if(a1[i]!=a2[i])
+			return false;
+	}
+	return true;
+}
+function getCeilConflict(i,j,pos){
+	let conflictNum=0;
+	let abs=Math.abs;
+	for(let k=0;k<pos.length;k++){
+		if(k==i) continue;
+		else{
+			if((abs(k-i)==abs(pos[k]-j))||pos[k]==j) conflictNum++
+		}
+	}
+	return conflictNum;
+}
+function getMinIndex(arr){
+	let minIndex=[0];
+	let min=arr[0];
+	for(let i=1;i<arr.length;i++){
+		if(arr[i]==min) minIndex.push(i);
+		else{
+			if(arr[i]<min){
+				minIndex=[i];
+				min=arr[i];
+			}
+		}
+	}
+	return minIndex;
+}
+var start = Date.now();
+var result = nQueens_1(1000);
+var end = Date.now();
+console.log(result, end - start);
+</script>
