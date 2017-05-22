@@ -48,9 +48,11 @@ function nQueens_1(n){
 	for(let i=0;i<n/2;i++){
 		let p1=getRandom(0,n);
 		let p2=getRandom(0,n);
-		let temp=pos[p1];
-		pos[p1]=pos[p2];
-		pos[p2]=temp;
+		//use es6 swap two value
+		[pos[p1],pos[p2]]=[pos[p2],pos[p1]];
+		// let temp=pos[p1];
+		// pos[p1]=pos[p2];
+		// pos[p2]=temp;
 	}
 	let _pos=pos.slice();
 	//record every queen's conflict,shoud be caculate!
@@ -79,7 +81,7 @@ function getRandom(low,high){
 	let rand=Math.random()*(high-low)+low;
 	return Math.floor(rand);
 }
-function isConflicting(pos){}
+//judge arrays are eaual
 function arrayIsEqual(a1,a2){
 	if(a1.length!=a2.length) return false;
 	for (var i = a1.length - 1; i >= 0; i--) {
@@ -88,6 +90,7 @@ function arrayIsEqual(a1,a2){
 	}
 	return true;
 }
+//caculate every ceil's conflict number
 function getCeilConflict(i,j,pos){
 	let conflictNum=0;
 	let abs=Math.abs;
@@ -99,6 +102,7 @@ function getCeilConflict(i,j,pos){
 	}
 	return conflictNum;
 }
+//find all index of min value at an array
 function getMinIndex(arr){
 	let minIndex=[0];
 	let min=arr[0];
