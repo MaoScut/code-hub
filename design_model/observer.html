@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<div><span id='number'></span></div>
+<div>
+	<ul id='list-ul'></ul>
+</div>
+<div id='inputContainer'>
+	<input id='input' type="text">
+	<button id='submit'>submit</button>
+</div>
+
+</body>
+<script type="text/javascript">
+	let data = ['comment1', 'cofasdf2', 'cdfsdf3'];
+	function $(id){
+		return document.getElementById(id);
+	}
+	function init(){
+		data.forEach(value=>{
+			let li = document.createElement('li');
+			li.innerHTML=value;
+			$('list-ul').appendChild(li);
+		});
+		$('number').innerHTML=data.length;
+	}
+	function addComment(comment){
+			let li = document.createElement('li');
+			li.innerHTML=comment;
+			$('list-ul').appendChild(li);
+	}
+	init();
+	let Observer = (function() {
+	let _message = {};
+	return {
+		regist: function(type, fn) {
+			if (typeof _message[type] === 'undefined') {//should be compared with string!
+				_message[type] = [fn];
+			} else {
+				_message[type].push(fn);
+			}
+		},
+		fire: function(type, args={}) {
+			if (!_message[type]) return;
+			let events = {
+				type: type,
+				args: args
+			};
+			for(let i=0, j=_message[type].length;i<j;i++){
+				_message[type][i].call(this, events)
+			}
+		},
+		remove: function(type, fn) {
+			if(_message[type] instanceof Array){
+				let i = _message[type].length-1;
+				for(;i>=0;i--){
+					_message[type][i] ===fn && _message[type].splice(i,1);
+				}
+			}
+		}
+	}
+})();
+//let add=0;
+Observer.regist('add',()=>{
+	let $number=$('number');
+	let num=Number($number.innerHTML)+1;
+	$number.innerHTML=num;
+});
+Observer.regist('add',(e)=>{
+	addComment(e.args.text);
+})
+$('submit').onclick=function(){
+	Observer.fire('add',{
+		text: $('input').value
+	})
+}
+</script>
+</html>
