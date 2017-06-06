@@ -1,0 +1,84 @@
+<script type="text/javascript">
+//demension is unknown
+function rosenbrock (){
+	let result = 0;
+	for(let i=0; i<arguments.length-1;i++){
+		result += square(100 * (arguments[i+1]-arguments[i]*arguments[i]))+square(arguments[i]-1)
+	}
+	return result;
+}
+function f1(){
+	let result=0;
+	for(let i=0; i<arguments.length;i++){
+		result += square(arguments[i]);
+	}
+	return result;
+}
+function square(num){
+	return num*num;
+}
+function getRandom(low, high){
+	return Math.random()*(high-low)+low;
+}
+function matrix(section,row,col){
+	let ma = [];
+	for(let i=0;i<row;i++){
+		let arr= [];
+		for(let j=0;j<col;j++){
+			let rand = Math.random()>0.5?getRandom(section[0],section[1]):-getRandom(section[0],section[1]);
+			arr.push(rand);
+		}
+		ma.push(arr);
+	}
+	return ma;
+}
+
+//m: number of population
+function PSO (fn, dem, m){
+	//some const
+	const xSection = [-30, 30],
+	vSection = [-60, 60],
+	c0=1,c1=c2=2;
+
+	let XMatrix=matrix(xSection, m,dem);
+	let VMatrix=matrix(vSection, m, dem);
+	let gBest=XMatrix[0].slice();
+	let pBest=new Array (m);
+	//initial individual adaptive value
+	for (let i = 0; i<m; i++){
+		pBest[i]=XMatrix[i].slice();
+		if(fn(...XMatrix[i]) < fn(...gBest)) {
+			gBest=XMatrix[i].slice();
+		}
+	}
+	//
+	let iterationNum = 100000;
+	let currentIteration = 0;
+	while(currentIteration<iterationNum){
+		for(let i = 0; i<m; i++){
+			for(let j =0; j<dem; j++){
+				let temp = VMatrix[i][j];
+				VMatrix[i][j]=c0*VMatrix[i][j]+c1*Math.random()*(pBest[i][j]-XMatrix[i][j])+c2*Math.random()*(gBest[j]-XMatrix[i][j]);
+				VMatrix[i][j]=correct(VMatrix[i][j],vSection);
+				XMatrix[i][j] += temp;
+				XMatrix[i][j]=correct(XMatrix[i][j], xSection);
+			}
+			if(fn(...XMatrix[i]) < fn(...pBest[i])) 
+				pBest[i]=XMatrix[i].slice();
+			if(fn(...XMatrix[i]) < fn(...gBest)) 
+				gBest = XMatrix[i].slice();
+		}
+		if(currentIteration%100==0) console.log('best position:', fn(...gBest));
+		currentIteration ++;
+	}
+	return gBest;
+}
+
+function correct(value, section){
+	if(value<section[0]) return section[0];
+	if(value>section[1]) return section[1];
+	return value;
+}
+PSO(rosenbrock, 4, 5);
+//PSO(f1, 2, 5);
+</script>
