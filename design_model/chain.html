@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<div id="demo">demo</div>
+<div id="code"></div>
+</body>
+</html>
+<!-- <script type="text/javascript" src = './jquery-3.2.1.js'></script> -->
+<script type="text/javascript">
+(function(){
+	let A = function (selector){
+		//if 'init' is written in simplified form, it can not go behind 'new'.
+		return new A.fn.init(selector);
+	};
+	A.fn = A.prototype = {
+		length: 2,
+		constructor: A,
+		getSize(){
+			return this.length;
+		},
+		init: function (selector){
+			this[0] = document.getElementById(selector);
+			this.length = 1;
+			//this.constructor = A;
+			//this.prototype = A.prototype;
+			//this point to A.fn or A.prototype
+			return this;
+		}
+	}
+	A.fn.init.prototype = A.fn;
+	//let a = new A();
+	//console.log(A().getSize());
+	//How to make demo can use getSize()?
+	let demo = A('demo');
+	console.log(demo);
+	//console.log(demo.getSize());
+
+	let code = A('code');
+	console.log(demo);	
+})();
+let A = function(selector, context){
+	return new A.prototype.init(selector, context);
+};
+A.prototype = {
+	constructor: A,
+	//push: Array.prototype.push,
+	//sort: Array.prototype.sort,
+	splice: Array.prototype.splice,//to make the return value to be an Array, just need add splice method.
+	init: function(selector, context=document){
+		this.length = 0;
+		if(~selector.indexOf('#')){
+			this[0] = document.getElementById(selector.slice(1));
+			this.length = 1;
+		} else {
+			let doms = context.getElementsByTagName(selector);
+			for(let i=0, len=doms.length; i<len; i++){
+				this[i] = doms[i];
+			}
+			this.length = doms.length;
+		}
+		this.context = context;
+		this.selector = selector;
+		return this;
+	}
+};
+A.prototype.init.prototype = A.prototype;
+A.prototype.extend = function () {
+	let i = 1,
+	len = arguments.length,
+	target = arguments[0],
+	j;
+	if(i == len){
+		target = this;
+		i--;
+	}
+	for(; i<len;i++){
+		for(j in arguments[i]){
+			target[j] = arguments[i][j];
+		}
+	}
+	return target;
+}
+let a = A('#demo');
+a.extend({say: function(){
+	console.log('hello');
+}})
+A.prototype.extend({
+	on: (function(){
+		if(document.addEventListener){
+			return function(type, fn){
+				let i = this.length -1;
+				for(; i>=0;i--){
+					this[i].addEventListener(type, fn, false);
+				}
+				return this;
+			}
+		} else if(document.attachEvent){
+			return function(){
+				let i = this.length -1;
+				for(;i>=0;i--){
+					this[i].attachEvent('on'+type, fn);
+				}
+				return this;
+			}
+		} else {
+			return function(type, fn){
+				let i = this.length -1;
+				for(;i>=0;i--){
+					this[i]['on'+type] = fn;
+				}
+				return this;
+			}
+		}
+	})()
+});
+
+A.prototype.extend({
+	camelCase: function(str){		
+		return str.replace(/\-(\w)/g, function(all,letter){
+			return letter.toUpperCase();
+		})
+	}
+});
+A.prototype.extend({
+	css: function(){
+		let arg = arguments,
+		len = arg.length;
+		if(len<1) return this;
+		if(len==1){
+			if(typeof arg[0] === 'string') {
+				if(this[0].currentStyle) {// IE
+					return this[0].currentStyle[arg[0]];
+				} else {
+					return getComputedStyle(this[0], false)[arg[0]];
+				}
+			}
+			else if(typeof arg[0]==='object') {
+				for (let k in arg[0]){
+					for(let j = 0; j<len; j++){
+						this[j].style[A.prototype.camelCase(k)] = arg[0][k];
+					}
+				}
+			}
+		} else if(len==2) {
+			for(let j = 0; j<this.length; j++){
+				this[j].style[A.prototype.camelCase(arg[0])] = arg[1];
+			}
+		}
+		return this;
+	}
+});
+A.prototype.extend({
+	attr: function(){
+		let args = arguments,
+		len = args.length;
+
+		if(len<1) return this;
+		if(len == 1){
+			if(typeof args[0] === 'string'){
+				return this[0].getAttribute(args[0]);
+			} else if (typeof args[0] =='object'){
+				for(let k in args[0]){
+					for(let i = 0; i<this.length;i++){
+						this[i].setAttribute(k, args[0][k]);
+					}
+				}
+			}
+		} else if (len == 2){
+			for(let i =0; i<this.length; i++){
+				this[i].setAttribute(args[0], args[1]);
+			}
+		}
+		return this;
+	}
+});
+A.prototype.extend({
+	html: function(){
+		let args = arguments;
+		if(args.length==0) return this[0].innerHTML;
+		else {
+			for(let i =0; i<this.length; i++){
+				this[i].innerHTML = args[0];
+			}
+		}
+		return this;
+	}
+})
+a.css({
+	'backgroundColor': 'green',
+	'font-size': '20px'
+})
+.on('click', function(){
+	alert('!!!');
+})
+.attr({
+	name: 'ddd',
+	className: 'ddd'
+})
+.html('<h1>abc</h1>');
+console.log(a.html());
+</script>
