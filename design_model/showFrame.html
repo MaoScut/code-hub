@@ -3,44 +3,101 @@
 <head>
 	<title></title>
 	<style type="text/css">
+	html, body{
+		height: 100%;
+		width: 100%;
+		margin: 0;
+	}
+		.alert-cover{
+			width: 100%;
+			height: 100%;
+			background-color: gray;
+			position: fixed;
+			top: 0;
+			left: 0;
+		}
 		.alert-panel{
-    width: 30em;
-    height: 15em;
-    border: 0.3em solid #2196F3;
-    border-radius: 0.5em;
-    text-align: center;
+		    width: 30em;
+		    height: 15em;
+		    background-color: white;
+		    border: 0.3em solid #2196F3;
+		    border-radius: 0.5em;
+		    text-align: center;
+		    top: 50%;
+		    left: 50%;
+		    position: fixed;
+		    transform: translateY(-50%) translateX(-50%);
+		}
+		.alert-title-panel{
+			width: 100%;
+			height: 10%;
+			background-color: red;
+		}
+		.alert-close-btn{
+			background-color: gray;
+			display: inline-block;
+			position: absolute;
+			right: 0;
+			border-radius: 100%;
+			width: 1em;
 		}
 		.alert-btn{
-    width: 3em;
-    height: 1.5em;
-    display: inline-block;
-    border-radius: 0.2em;
-    border: 0.2em solid #2196F3;
-    margin: 0 19%;
-    vertical-align: middle;
-    line-height: 1.5em;
-    cursor: pointer;
+		    width: 3em;
+		    height: 1.5em;
+		    display: inline-block;
+		    border-radius: 0.2em;
+		    border: 0.2em solid #2196F3;
+		    margin: 0 19%;
+		    vertical-align: middle;
+		    line-height: 1.5em;
+		    cursor: pointer;
 		}
 		.alert-btn:hover{
 			background-color: red;
 		}
+		.test{
+			width: 400px;
+		    height: 400px;
+		    border: 0.2em solid #2196F3;
+		}
 	</style>
 </head>
 <body>
-
+	<div class="test" ></div>
+	<div class="test" ></div>
+	<div class="test" ></div>
+	<div class="test" ></div>
+	<div class="test" ></div>
+	<div class="test" ></div>
+	<div class="test" ></div>
+	<div class="test" ></div>
+	<div class="test" ></div>
+	<div class="test" ></div>
+	<div class="test" ></div>
 </body>
 </html>
 <script type="text/javascript">
+//note: closeBtn just close hide the frame, it doesn't do other thing.
 function Alert(data) {
 	if(! data ) return;
 	this.content = data.content;
 	this.panel = document.createElement('div');
+	this.cover = document.createElement('div');
+	this.titlePanel = document.createElement('div');
+	this.titleNode = document.createTextNode('');
+	this.closeBtn = document.createElement('span');
 	this.contentNode = document.createElement('p');
 	this.confirmBtn = document.createElement('span')
-	this.closeBtn = document.createElement('span');
+	
 	this.panel.className = 'alert-panel';
-	this.closeBtn.className = 'alert-btn';
-	this.closeBtn.innerHTML = data.cancel || 'No!';
+	this.cover.className = 'alert-cover';
+
+	this.titlePanel.className = 'alert-title-panel';
+	this.titleNode.data = data.title;
+	this.closeBtn.className = 'alert-close-btn';
+
+	this.closeBtn.innerHTML = 'X';
+
 	this.confirmBtn.className = 'alert-btn';
 	this.confirmBtn.innerHTML = data.confirm || 'Yes!';
 	this.contentNode.innerHTML = this.content;
@@ -50,11 +107,15 @@ function Alert(data) {
 }
 Alert.prototype = {
 	init(){
-		this.panel.appendChild(this.contentNode);
-		this.panel.appendChild(this.closeBtn);		
-		this.panel.appendChild(this.confirmBtn);
+		this.titlePanel.appendChild(this.titleNode);
+		this.titlePanel.appendChild(this.closeBtn);
 
-		document.body.appendChild(this.panel);
+		this.panel.appendChild(this.titlePanel);
+		this.panel.appendChild(this.contentNode);
+		this.panel.appendChild(this.confirmBtn);
+		this.cover.appendChild(this.panel);
+
+		document.body.appendChild(this.cover);
 
 		this.bindEvent();
 		this.show();
@@ -62,7 +123,6 @@ Alert.prototype = {
 	bindEvent(){
 		let me = this;
 		this.closeBtn.onclick = function() {
-			me.fail();
 			me.hide();
 		};
 		this.confirmBtn.onclick = function() {
@@ -79,6 +139,7 @@ Alert.prototype = {
 }
 let alertObj = {
 	content: 'Are you sure?',
+	title: 'title',
 	success: function() {
 		console.log('success!');
 	},
