@@ -36,7 +36,7 @@ function matrix(section,row,col){
 //m: number of population
 function PSO (fn, dem, m){
 	//some const
-	const xSection = [-30, 30],
+	const xSection = [-0, 8],
 	vSection = [-60, 60],
 	c0=1,c1=c2=2;
 
@@ -79,6 +79,13 @@ function correct(value, section){
 	if(value>section[1]) return section[1];
 	return value;
 }
-PSO(rosenbrock, 4, 5);
+function test(x){
+	let e = Math.E;
+	let sin = Math.sin;
+	let pow = Math.pow;
+	return 5*pow(e, -0.5*x)*sin(30*x)+pow(e, 0.2*x)*sin(20*x)+6;
+}
+//PSO(rosenbrock, 4, 5);
+PSO(test, 1, 5);
 //PSO(f1, 2, 5);
 </script>

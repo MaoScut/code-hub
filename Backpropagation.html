@@ -1,0 +1,59 @@
+<script type="text/javascript">
+//a three layers network
+//d: input vector demison
+//q: the number of hidden layer nerve
+//l: output vector demsion
+	function BPNetwork(d, q, l) {
+		let v = produceRandomMatrix({row: d, col: q, range: [-1,1]});
+		let w = produceRandomMatrix({row: q, col: l, range: [-1, 1]});
+		let xita = produceRandomMatrix({row: q, col: 1, range: [-1, 1]});
+		let gama = produceRandomMatrix({row: l, col: 1, range: [-1, 1]});
+		const X = [];//elements are vector
+		const Y = [];//elements are vector
+		let k = 0;//k is the order of simple
+		let s1 = function(x) {
+			return x;
+		};
+		let s2 = function(x) {
+			return x;
+		}
+		while(true) {
+			//hidden layer output
+			let b = [];
+			for(let i=0; i<q; i++){//for every hidden layer nerve
+				let sum = 0;
+				for(let j=0; j<d; j++){
+					sum += X[k][j] * v[j][i];
+				}
+				b.push(s1(sum-gama[i]));
+			}
+			//output
+			let o = [];
+			for (let i=0; i<l; i++){
+				let sum = 0;
+				for (let j=0; j<q; j++){
+					sum += b[j] * w[j][i];
+				}
+				o,push(s2(sum - xita[i]));
+			}
+		}
+	}
+	function produceRandomMatrix({ row, col, range }) {
+		let matrix = [];
+		for (let i = 0; i < row; i++) {
+			let vector = [];
+			if (col == 1) vector = getRandom(range);
+			else {
+				for (let j = 0; j < col; j++) {
+					vector.push(getRandom(range));
+				}
+			}
+			matrix.push(vector);
+		}
+		return matrix;
+	}
+	function getRandom(range) {
+		return Math.random() * (range[1] - range[0]) + range[0];
+	}
+	BPNetwork(5,4,2);
+</script>
