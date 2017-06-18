@@ -8,6 +8,7 @@
 		let w = produceRandomMatrix({row: q, col: l, range: [-1, 1]});
 		let xita = produceRandomMatrix({row: q, col: 1, range: [-1, 1]});
 		let gama = produceRandomMatrix({row: l, col: 1, range: [-1, 1]});
+		let yita = 1;
 		const X = [];//elements are vector
 		const Y = [];//elements are vector
 		let k = 0;//k is the order of simple
@@ -34,7 +35,36 @@
 				for (let j=0; j<q; j++){
 					sum += b[j] * w[j][i];
 				}
-				o,push(s2(sum - xita[i]));
+				o.push(s2(sum - xita[i]));
+			}
+			//modify w
+			for (let i=0; i<q; i++) {
+				for (let j=0; j<l; j++) {
+					w[i][j] += yita * o[j] * (1-o[j])(Y[k][j]-o[j]) * b[i];
+				}
+			}
+			//modify xita
+			for (let i = 0; i<l; i++) {
+				xita[i] += -1*o[j] * (1-o[j])(Y[k][j]-o[j])
+			}
+			//e
+			let e = [];
+			for (let i=0; i<q; i++){
+				let sum = 0;
+				for (let j=0; j<l; j++) {
+					sum += w[i][j] * o[j] * (1-o[j])(Y[k][j]-o[j]);
+				}
+				e.push(sum);
+			}
+			//modify v
+			for (let i=0;i<d; i++) {
+				for (let j=0; j<q; j++) {
+					v[d][j] += yita * e[j] * X[k][i];
+				}
+			}
+			//modify gama
+			for (let i=0; i<q; i++) {
+				gama[i] += -1 * e[i];
 			}
 		}
 	}
