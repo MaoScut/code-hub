@@ -3,70 +3,92 @@
 //d: input vector demison
 //q: the number of hidden layer nerve
 //l: output vector demsion
-	function BPNetwork(d, q, l) {
+	function BPNetwork(d, q, l, X, Y) {
 		let v = produceRandomMatrix({row: d, col: q, range: [-1,1]});
 		let w = produceRandomMatrix({row: q, col: l, range: [-1, 1]});
-		let xita = produceRandomMatrix({row: q, col: 1, range: [-1, 1]});
-		let gama = produceRandomMatrix({row: l, col: 1, range: [-1, 1]});
+		let xita = produceRandomMatrix({row: l, col: 1, range: [-1, 1]});
+		let gama = produceRandomMatrix({row: q, col: 1, range: [-1, 1]});
 		let yita = 1;
-		const X = [];//elements are vector
-		const Y = [];//elements are vector
+		// const X = [];//elements are vector
+		// const Y = [];//elements are vector
 		let k = 0;//k is the order of simple
 		let s1 = function(x) {
-			return x;
+			let e = Math.E;
+			let pow = Math.pow;
+			let result = (1-pow(e, -x))/(1+pow(e, -x));
+			if(Number.isNaN(result)) debugger;
+			return result;
 		};
 		let s2 = function(x) {
-			return x;
+			let e = Math.E;
+			let pow = Math.pow;
+			let result = (1-pow(e, -x))/(1+pow(e, -x));
+			if(Number.isNaN(result)) debugger;
+			return result;
 		}
-		while(true) {
-			//hidden layer output
-			let b = [];
-			for(let i=0; i<q; i++){//for every hidden layer nerve
-				let sum = 0;
-				for(let j=0; j<d; j++){
-					sum += X[k][j] * v[j][i];
+		let times = 0;
+		while(times<1000){
+			let globalErr = 0;
+			while(k<X.length) {
+					//hidden layer output
+					let b = [];
+					for(let i=0; i<q; i++){//for every hidden layer nerve
+						let sum = 0;
+						for(let j=0; j<d; j++){
+							let temp = X[k][j] * v[j][i];
+							sum += X[k][j] * v[j][i];
+
+						}
+						b.push(s1(sum-gama[i]));
+					}
+					//output
+					let o = [];
+					for (let i=0; i<l; i++){
+						let sum = 0;
+						for (let j=0; j<q; j++){
+							sum += b[j] * w[j][i];
+						}
+						let _o = s2(sum - xita[i]);
+						o.push(_o);
+						//record globalErr
+						globalErr += (_o - Y[k][i]) * (_o - Y[k][i]);
+						if(Number.isNaN(globalErr)) debugger;
+					}
+					//modify w
+					for (let i=0; i<q; i++) {
+						for (let j=0; j<l; j++) {
+							w[i][j] += yita * o[j] * (1-o[j]) * (Y[k][j]-o[j]) * b[i];
+						}
+					}
+					//modify xita
+					for (let j = 0; j<l; j++) {
+						xita[j] += -1*o[j] * (1-o[j]) * (Y[k][j]-o[j])
+					}
+					//e
+					let e = [];
+					for (let i=0; i<q; i++){
+						let sum = 0;
+						for (let j=0; j<l; j++) {
+							sum += w[i][j] * o[j] * (1-o[j]) * (Y[k][j]-o[j]);
+						}
+						e.push(b[i]*(1-b[i])*sum);
+					}
+					//modify v
+					for (let i=0;i<d; i++) {
+						for (let j=0; j<q; j++) {
+							v[i][j] += yita * e[j] * X[k][i];
+						}
+					}
+					//modify gama
+					for (let i=0; i<q; i++) {
+						gama[i] += -1 * e[i];
+					}
+					k++;
 				}
-				b.push(s1(sum-gama[i]));
+				//global error
+				console.log(globalErr);
+				times ++;
 			}
-			//output
-			let o = [];
-			for (let i=0; i<l; i++){
-				let sum = 0;
-				for (let j=0; j<q; j++){
-					sum += b[j] * w[j][i];
-				}
-				o.push(s2(sum - xita[i]));
-			}
-			//modify w
-			for (let i=0; i<q; i++) {
-				for (let j=0; j<l; j++) {
-					w[i][j] += yita * o[j] * (1-o[j])(Y[k][j]-o[j]) * b[i];
-				}
-			}
-			//modify xita
-			for (let i = 0; i<l; i++) {
-				xita[i] += -1*o[j] * (1-o[j])(Y[k][j]-o[j])
-			}
-			//e
-			let e = [];
-			for (let i=0; i<q; i++){
-				let sum = 0;
-				for (let j=0; j<l; j++) {
-					sum += w[i][j] * o[j] * (1-o[j])(Y[k][j]-o[j]);
-				}
-				e.push(sum);
-			}
-			//modify v
-			for (let i=0;i<d; i++) {
-				for (let j=0; j<q; j++) {
-					v[d][j] += yita * e[j] * X[k][i];
-				}
-			}
-			//modify gama
-			for (let i=0; i<q; i++) {
-				gama[i] += -1 * e[i];
-			}
-		}
 	}
 	function produceRandomMatrix({ row, col, range }) {
 		let matrix = [];
@@ -85,5 +107,22 @@
 	function getRandom(range) {
 		return Math.random() * (range[1] - range[0]) + range[0];
 	}
-	BPNetwork(5,4,2);
+	//BPNetwork(5,4,2);
+	function test () {
+		let n = 200;
+		let X = Array(n);
+		let Y = Array(n);
+		for (let i=0;i<n;i++){
+			let x = getRandom([0,2]);
+			let y = getRandom([0,2]);
+			X[i] = [x, y];
+			if(0.5 * x < y && 2 * x > y && x + y -3<0){
+				Y[i] = [1, 0];
+			} else {
+				Y[i] = [0, 1];
+			}
+		}
+		BPNetwork(2, 4, 2, X, Y);
+	}
+	test();
 </script>
