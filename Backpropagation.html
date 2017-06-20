@@ -4,6 +4,10 @@
 //q: the number of hidden layer nerve
 //l: output vector demsion
 	function BPNetwork(d, q, l, X, Y) {
+		this. d = d;
+		this. q = q;
+		this. l = l;
+
 		let v = produceRandomMatrix({row: d, col: q, range: [-1,1]});
 		let w = produceRandomMatrix({row: q, col: l, range: [-1, 1]});
 		let xita = produceRandomMatrix({row: l, col: 1, range: [-1, 1]});
@@ -107,6 +111,46 @@
 				k = 0;
 				times ++;
 			}
+			this.v = v;
+			this.w = w;
+			this.xita = xita;
+			this.gama = gama;
+			this.error = 0;
+			this.test = function (X,Y) {
+				let k = 0;
+				let correct = 0;
+				while(k<X.length) {
+					//hidden layer output, demension is q
+					let b = [];
+					for(let i=0; i<q; i++){//for every hidden layer nerve
+						let sum = 0;
+						for(let j=0; j<d; j++){
+							//X[k][j]: the value of the k'th simple the j'th demension
+							//v[j][i]: weight between j'th demension and i'th hidden nerve
+							sum += X[k][j] * this.v[j][i];
+						}
+						b.push(s1(sum-this.gama[i]));//
+					}
+					//output
+					let o = [];
+					let error = [];
+					for (let i=0; i<l; i++){
+						let sum = 0;
+						for (let j=0; j<q; j++){
+							sum += b[j] * this.w[j][i];
+						}
+						let _o = s2(sum - this.xita[i]);
+						if(_o>=0.5) _o = 1;
+						else _o = 0;
+						o.push(_o);
+						error.push(_o- Y[k][i]);
+					}
+					console.log(error);
+					if(error.every(v=>v==0)) correct++;
+					k++;
+				}
+				console.log((correct/X.length).toFixed(3) * 100 + '%');
+			}
 	}
 	function produceRandomMatrix({ row, col, range }) {
 		let matrix = [];
@@ -127,22 +171,35 @@
 	}
 	//BPNetwork(5,4,2);
 	function test () {
-		let n = 20;
-		let X = Array(n);
-		let Y = Array(n);
-		for (let i=0;i<n;i++){
-			let x = getRandom([0,2]);
-			let y = getRandom([0,2]);
-			X[i] = [x, y];
-			if(0.5 * x < y && 2 * x > y && x + y -3<0){
-				Y[i] = [1, 0];
-			} else {
-				Y[i] = [0, 1];
+		function produceSimple(n) {
+			let X = Array(n);
+			let Y = Array(n);
+			for (let i=0;i<n;i++){
+				let x = getRandom([0,2]);
+				let y = getRandom([0,2]);
+				X[i] = [x, y];
+				if(0.5 * x < y && 2 * x > y && x + y -3<0){
+					Y[i] = [1, 0];
+				} else {
+					Y[i] = [0, 1];
+				}
+			}
+			return {
+				x: X,
+				y: Y
 			}
 		}
+		let s = produceSimple(200);
+		let X = s.x;
+		let Y = s.y;
+
 		// let X = [[1, 1], [0, 0], [1, 0], [0,1]];
 		// let Y = [[1], [0], [1], [1]];
-		BPNetwork(2, 4, 2, X, Y);
+		let net = new BPNetwork(2, 4, 2, X, Y);
+		let s1 = produceSimple(100);
+		let x1 = s1.x;
+		let y1 = s1.y;
+		net.test(x1,y1);
 	}
 	test();
 </script>
