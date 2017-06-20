@@ -13,33 +13,49 @@
 		// const Y = [];//elements are vector
 		let k = 0;//k is the order of simple
 		let s1 = function(x) {
+			// if(x<-700) return -1;
+			// let e = Math.E;
+			// let pow = Math.pow;
+			// let result = (1-pow(e, -2*x))/(1+pow(e, -2*x));//2*x??
+			// if(Number.isNaN(result)) debugger;
+			// return result;
+			//if(x<-700) return -1;
 			let e = Math.E;
 			let pow = Math.pow;
-			let result = (1-pow(e, -x))/(1+pow(e, -x));
+			let result = 1/(1+pow(e, -x));//2*x??
 			if(Number.isNaN(result)) debugger;
 			return result;
 		};
 		let s2 = function(x) {
+			// if(x<-700) return -1;
+			// let e = Math.E;
+			// let pow = Math.pow;
+			// let result = (1-pow(e, -2*x))/(1+pow(e, -2*x));
+			// if(Number.isNaN(result)) debugger;
+			// return result;
 			let e = Math.E;
 			let pow = Math.pow;
-			let result = (1-pow(e, -x))/(1+pow(e, -x));
+			let result = 1/(1+pow(e, -x));//2*x??
 			if(Number.isNaN(result)) debugger;
 			return result;
 		}
 		let times = 0;
 		while(times<1000){
+			//record error in every time
 			let globalErr = 0;
+			//for every simple
 			while(k<X.length) {
-					//hidden layer output
+					//hidden layer output, demension is q
 					let b = [];
 					for(let i=0; i<q; i++){//for every hidden layer nerve
 						let sum = 0;
 						for(let j=0; j<d; j++){
+							//X[k][j]: the value of the k'th simple the j'th demension
+							//v[j][i]: weight between j'th demension and i'th hidden nerve
 							let temp = X[k][j] * v[j][i];
 							sum += X[k][j] * v[j][i];
-
 						}
-						b.push(s1(sum-gama[i]));
+						b.push(s1(sum-gama[i]));//
 					}
 					//output
 					let o = [];
