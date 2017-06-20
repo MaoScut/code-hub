@@ -8,7 +8,7 @@
 		let w = produceRandomMatrix({row: q, col: l, range: [-1, 1]});
 		let xita = produceRandomMatrix({row: l, col: 1, range: [-1, 1]});
 		let gama = produceRandomMatrix({row: q, col: 1, range: [-1, 1]});
-		let yita = 1;
+		let yita = 0.8;
 		// const X = [];//elements are vector
 		// const Y = [];//elements are vector
 		let k = 0;//k is the order of simple
@@ -62,7 +62,7 @@
 					}
 					//modify xita
 					for (let j = 0; j<l; j++) {
-						xita[j] += -1*o[j] * (1-o[j]) * (Y[k][j]-o[j])
+						xita[j] += -1*yita*o[j] * (1-o[j]) * (Y[k][j]-o[j]);
 					}
 					//e
 					let e = [];
@@ -81,12 +81,14 @@
 					}
 					//modify gama
 					for (let i=0; i<q; i++) {
-						gama[i] += -1 * e[i];
+						gama[i] += -1 * yita * e[i];
 					}
 					k++;
 				}
 				//global error
 				console.log(globalErr);
+				globalErr = 0;
+				k = 0;
 				times ++;
 			}
 	}
@@ -109,7 +111,7 @@
 	}
 	//BPNetwork(5,4,2);
 	function test () {
-		let n = 200;
+		let n = 20;
 		let X = Array(n);
 		let Y = Array(n);
 		for (let i=0;i<n;i++){
@@ -122,6 +124,8 @@
 				Y[i] = [0, 1];
 			}
 		}
+		// let X = [[1, 1], [0, 0], [1, 0], [0,1]];
+		// let Y = [[1], [0], [1], [1]];
 		BPNetwork(2, 4, 2, X, Y);
 	}
 	test();
