@@ -3,6 +3,7 @@
 function GA(func, section, precision){
 	//produce 100 primary simple ramdomly
 	var simple=[];
+	let coder = new Coder (section, precision);
 	for(var i=0;i<100;i++){
 		var rand = getRandom(section);
 		simple.push(rand.toFixed(precision));
@@ -12,24 +13,24 @@ function GA(func, section, precision){
 	var gSimple = simple.sort((v1,v2)=>(func(v2)-func(v1))).slice(0,10);
 	//cross
 	var preSimple = gSimple.slice().map(v=>Number(v));
-	for(var j=0;j<50;j++){
+	for(var j=0;j<500;j++){
 		var cSimple=[];
 		for(var i=0;i<5;i++){
 			//pick out two gSimple
 			var s1= gSimple[Math.floor(getRandom([0,10]))];
 			var s2=gSimple[Math.floor(getRandom([0,10]))];
 			//transform s1, s2 into binary
-			s1=(s1*Math.pow(10,precision)).toString(2);
-			s2=(s2*Math.pow(10,precision)).toString(2)
+			// s1=(s1*Math.pow(10,precision)).toString(2);
+			// s2=(s2*Math.pow(10,precision)).toString(2)
+			s1 = coder.inCoder(s1);
+			s2 = coder.inCoder(s2);
 			//produce cross section
 			var len = s1.length;
 			var cStart = Math.floor(getRandom([0,len]));
 			var cEnd = Math.floor(getRandom([cStart,len]));
 			//cross
 			//you should make sure that after crossing, result must at section!
-			var time=0;
-			do {
-				time++;
+			if(Math.random()<0.6) {
 				s1 = s1.split('');
 				s2 = s2.split('');
 				for (var i = cStart; i <= cEnd; i++) {
@@ -39,9 +40,11 @@ function GA(func, section, precision){
 				}
 				s1 = s1.join('');
 				s2 = s2.join('');
-			} while ((parseInt(s1,2)/Math.pow(10,precision) > section[1] || parseInt(s2,2)/Math.pow(10,precision) > section[1])&&time<500)
-			cSimple.push(parseInt(s1,2)/Math.pow(10,precision));
-			cSimple.push(parseInt(s2,2)/Math.pow(10,precision));
+			} 
+			// cSimple.push(parseInt(s1,2)/Math.pow(10,precision));
+			// cSimple.push(parseInt(s2,2)/Math.pow(10,precision));
+			cSimple.push(coder.deCoder(s1));
+			cSimple.push(coder.deCoder(s2));
 		}
 		//pick out top 10 among currentSimple and previousSimple
 		cSimple = cSimple.concat(preSimple).sort(compare(func)).slice(0,10);
@@ -63,5 +66,31 @@ function f(x){
 function g(x){
 	return -(x*x/2-5*x+10);
 }
-console.log(GA(g,[0,31],3));
+function Coder (section, precision) {
+	this. section = section.slice();
+	this. precision = precision;
+	this.inCoder = (num) => {
+		//num = num.slice(0, num.indexOf('.') + this.precision + 1)
+		let smallSectionNum = (this.section[1] - this.section[0]) / Math.pow(10, -this.precision);
+		let bLength = 0;
+		while(Math.pow(2, bLength) < smallSectionNum) bLength ++;
+		//inlarge num to avoid digital
+		num = (num * Math.pow(10, this.precision)).toFixed(0);
+		let bS0 = this.section[0] * Math.pow(10, this.precision);
+		let result = (num - bS0).toString(2);
+		let zeroStr = new Array(bLength - result.length).fill(0).join('');
+		return zeroStr + result;
+	}
+	this.deCoder = (bNum) => {
+		bNum = Number.parseInt(bNum, 2);
+		bNum = bNum / Math.pow(10, this.precision);
+		return bNum + this.section[0];
+	}
+}
+// let c = new coder([1,32], 5);
+// let test = 1.02;
+// let b = c.inCoder(test);
+// console.log(b);
+// console.log(c.deCoder(b));
+console.log(GA(g,[0,31],5));
 </script>
