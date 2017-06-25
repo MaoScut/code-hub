@@ -1,0 +1,83 @@
+<script type="text/javascript">
+	//use K-Means to divide the data into k group
+	function KMeans(k, precision) {
+		//every elements is a mutidimensional array
+		let data = [];
+		data[0] = [1,1,1,1];
+		data[1] = [1.1, 1.2 ,2, 1.4];
+		data[2] = [0.9,0.8,0.9,1]
+		data[3] = [5,5,5,5];
+		data[4] = [5.2,5.3,5.1,5.5];
+		data[5]= [4.8,4.9,4.7,4.6];
+		//produce k random which is not repeat from [0, data.length), and they are the index of
+		//the initial center
+		let centerIndex = uniqueIntRandomArr(k,[0, data.length])
+		let kClass = [];
+		function uniqueIntRandomArr (n, section) {
+			let result = new Array (n);
+			// let _section = section.slice();
+			// for(let i = 0;i<n; i++){
+			// 	let rand = getIntRandom([0, _section.length]);
+			// 	result.push(_section[rand]);
+
+			// }
+			for(let i=0; i<k; i++){
+				let rand = getIntRandom(section);
+				while(result.indexOf(rand)!==-1) rand = getIntRandom(section);
+				result[i] = rand;
+			}
+			return result;
+		}
+		function getIntRandom(range) {
+			return Math.floor(Math.random() * (range[1] - range[0]) + range[0]);
+		}
+		let classCenter = new Array (k);
+		for(let i=0; i<k; i++) {
+			classCenter[i] = data[centerIndex[i]].slice();
+		}
+		let moveDis = Number.POSITIVE_INFINITY;
+		while(moveDis>precision){
+			moveDis = 0;
+		//find the closest center for every rest data
+		for(let i=0; i<k;i++){
+			kClass[i] = [];
+		}
+		for(let i=0; i<data.length;i++) {
+			let distanceArr = centerIndex.map(v=>getDistance(data[v], data[i]));
+			let minDisIndex = 0;
+			for(let j=0; j<distanceArr.length; j++){
+				if(distanceArr[j]<distanceArr[minDisIndex]) minDisIndex = j;
+			}
+			kClass[minDisIndex].push(i);
+		}
+		function getDistance(x,y) {
+			let result = 0;
+			for(let i=0; i<x.length; i++){
+				result += Math.abs(x[i]-y[i]);
+			}
+			return result;
+		}
+		//for every class, find the center and repeat the process above
+		let newClassCenter = new Array(k);
+		for(let i=0; i<k; i++){
+			newClassCenter[i] = (kClass[i].reduce((pre, v)=>{
+				let singleData = data[v].slice();
+				for(let j=0;j<singleData.length; j++){
+					pre[j]+=singleData[j];
+				}
+				return pre;
+			}, data[kClass[i][0]].slice())).map(v=>v/kClass[i].length);
+		}
+		//caculate the center move distance
+		
+		for(let i=0; i<k; i++) {
+			for(let j=0;j<data[0].length; j++){
+				moveDis += 0.5*(newClassCenter[i][j] - classCenter[i][j]) * (newClassCenter[i][j] - classCenter[i][j]);
+			}
+		}
+		classCenter = newClassCenter;
+	}
+	return classCenter;
+	}
+	console.log(KMeans(2,2));
+</script>
