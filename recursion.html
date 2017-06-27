@@ -1,0 +1,65 @@
+<script type="text/javascript">
+	//阶乘
+	function factorial(n) {
+		if(n<=1) return n;
+		else return n * factorial(n-1);
+	}
+
+	function test(func,arg,expect){
+		let result = func(...arg);
+		if(Array.isArray(result)) result = result.join('-');
+		if(result === expect) console.log('true');
+		else console.log('false');
+	}
+	// test(factorial, [2], 2);
+	// test(factorial, [3], 6);
+	// test(factorial, [4], 24);
+
+	//直接插入排序（递归）
+	function insertSort(arr) {
+		//把下标为k的元素插入到前k-1个已经排序好的元素中
+		function _insertSort(k){
+			if(k<arr.length){
+				let temp = arr[k];
+				let startIndex = k-1;
+				//当startIndex等于0时候，说明每个元素都比要插入的元素大
+				//把0上的元素移动到1,startIndex就变为-1,此时不能再循环了
+				while(arr[startIndex] > temp && startIndex >= 0) {
+					arr[startIndex+1] = arr[startIndex];
+					startIndex --; 
+				}
+				//此时下标或者是指向的是比temp小的元素，或者是等于-1,故需要往前挪动一位
+				startIndex ++;
+				arr[startIndex] = temp;
+				_insertSort(k+1);
+			}
+		}
+		_insertSort(1);
+		return arr;
+	}
+	// test(insertSort,[[1,2,3,5,4]], '1-2-3-4-5');
+	// test(insertSort,[[2,1,4,5,3]], '1-2-3-4-5');
+	// test(insertSort,[[3,1,4,5,2]], '1-2-3-4-5');
+	// test(insertSort,[[4,3,2,1,5]], '1-2-3-4-5');
+	// test(insertSort,[[5,4,3,2,1]], '1-2-3-4-5');
+
+	//整数划分的数量
+	// 	核心递归公式
+	// q(n,m)表示整数n的划分中，加数小于等于m的划分数目
+	// r(n,m)表示整数n的划分中，包含m但是不包含大于m的划分数目
+	// q(n,m)=q(n,m-1)+r(n,m)
+	// r(n,m)=q(n-m,m)
+	// 结合可以得到
+	// q(n,m)=q(n,m-1)+q(n-m,m)
+	function divideInt(n) {
+		//注意递归出口！
+		function _divideInt(n,m) {
+			if(m>n) return _divideInt(n,n);
+			if(m==1||n==1) return 1;
+			if(n==m) return _divideInt(n,n-1) + 1; //为什么？
+			return _divideInt(n, m-1) + _divideInt(n-m, m);
+		}
+		return _divideInt(n,n);
+	}
+	test(divideInt,[4], 5);
+</script>
