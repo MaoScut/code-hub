@@ -36,19 +36,21 @@
 			classCenter[i] = data[centerIndex[i]].slice();
 		}
 		let moveDis = Number.POSITIVE_INFINITY;
+		let iteration = 0;
 		while(moveDis>precision){
+			iteration ++;
 			moveDis = 0;
 		//find the closest center for every rest data
 		for(let i=0; i<k;i++){
 			kClass[i] = [];
 		}
 		for(let i=0; i<data.length;i++) {
-			let distanceArr = centerIndex.map(v=>getDistance(data[v], data[i]));
+			let distanceArr = classCenter.map(v=>getDistance(v, data[i]));
 			let minDisIndex = 0;
 			for(let j=0; j<distanceArr.length; j++){
 				if(distanceArr[j]<distanceArr[minDisIndex]) minDisIndex = j;
 			}
-			kClass[minDisIndex].push(i);
+			kClass[minDisIndex].push(data[i]);
 		}
 		function getDistance(x,y) {
 			let result = 0;
@@ -60,13 +62,20 @@
 		//for every class, find the center and repeat the process above
 		let newClassCenter = new Array(k);
 		for(let i=0; i<k; i++){
-			newClassCenter[i] = (kClass[i].reduce((pre, v)=>{
-				let singleData = data[v].slice();
-				for(let j=0;j<singleData.length; j++){
-					pre[j]+=singleData[j];
-				}
-				return pre;
-			}, data[kClass[i][0]].slice())).map(v=>v/kClass[i].length);
+			// newClassCenter[i] = (kClass[i].reduce((pre, v)=>{
+			// 	let singleData = data[v].slice();
+			// 	for(let j=0;j<singleData.length; j++){
+			// 		pre[j]+=singleData[j];
+			// 	}
+			// 	return pre;
+			// }, data[kClass[i][0]].slice())).map(v=>v/kClass[i].length);
+			// let tempCenter = new Array(data[0].length).fill(0);
+			// for(let j=0; j<kClass[i].length; j++){
+			// 	for(let d=0;d<tempCenter.length;d++){
+			// 		tempCenter[d] +=data[kClass[i][j]][d];
+			// 	}
+			// }
+			newClassCenter[i] = getMeanValue(kClass[i]);
 		}
 		//caculate the center move distance
 		
@@ -77,7 +86,28 @@
 		}
 		classCenter = newClassCenter;
 	}
+	console.log(iteration);
 	return classCenter;
 	}
-	console.log(KMeans(2,2));
+	let r = KMeans(2,0.000001);
+	console.log(r[0]);
+	console.log(r[1]);
+	function getMeanValue(arr) {
+		let sumArr = arr.reduce((pre, cur)=>{
+			//let temp = new Array(arr[0].length);
+			for(let i=0; i<pre.length; i++){
+				pre[i]+=cur[i];
+			}
+			return pre;
+		}, Array(arr[0].length).fill(0));
+		return sumArr.map(v=>v/arr.length);
+	}
+	let test = [
+	Array(5).fill(1),
+	Array(5).fill(2),
+	Array(5).fill(3),
+	Array(5).fill(4),
+	Array(5).fill(5),
+	];
+	//console.log(getMeanValue(test));
 </script>
