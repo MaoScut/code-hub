@@ -1,0 +1,121 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+<title>无标题文档</title>  
+<style>  
+@keyframes warn {  
+    0% {  
+        transform: scale(1);  
+        opacity: 0.2;  
+    }  
+     10% {  
+        transform: scale(1.1);  
+        opacity: 0.4;  
+    }  
+    20% {  
+        transform: scale(1.2);  
+        opacity: 0.6;  
+    }  
+    30% {  
+        transform: scale(1.3);  
+        opacity: 0.8;  
+    }  
+    40% {  
+        transform: scale(1.4);  
+        opacity: 1;  
+    }  
+    50% {  
+        transform: scale(1.5);  
+        opacity: 0.9;  
+    }  
+        60% {  
+        transform: scale(1.6);  
+        opacity: 0.8;  
+    }  
+     70% {  
+        transform: scale(1.7);  
+        opacity: 0.6;  
+    }  
+    80% {  
+        transform: scale(1.8);  
+        opacity: 0.4;  
+    }  
+    90% {  
+        transform: scale(1.9);  
+        opacity: 0.2;  
+    }  
+    100% {  
+        transform: scale(2);  
+        opacity: 0.0;  
+    }  
+}  
+  
+.container {  
+    position: relative;  
+    width: 40px;  
+    height: 40px;  
+
+}  
+/* 保持大小不变的小圆圈  */  
+.dot {  
+    position: absolute;  
+    width: 300px;  
+    height: 300px;  
+    left: 300px;  
+    top: 300px;  
+    border: 2px solid red;  
+    border-radius: 50%;  
+    transition: all 0.5s;
+    box-sizing: border-box;;
+    opacity: 0.5;
+    z-index: 3;
+}  
+.dot:hover{
+	width: 350px;
+	height: 350px;
+	transform: translateX(-25px) translateY(-25px);
+	opacity: 1;
+} 
+/* 产生动画（向外扩散变大）的圆圈  */  
+.pulse {  
+    position: absolute;  
+    width: 300px;   
+    height: 300px;  
+    left: 300px;  
+    top: 300px;  
+    border: 6px solid red;  
+    border-radius: 50%;  
+    opacity: 0;  
+	z-index: 0;
+    box-sizing: border-box;;
+}
+.anima{
+animation: warn 1s ease-out;  
+    animation-iteration-count: infinite;  
+}
+
+
+</style>  
+  
+</head>  
+  
+<body>  
+<div class="container">  
+
+    <div id='cycle' class="pulse"></div>  
+    <img id="img0" src="2.jpg" class="dot" />
+
+</div>  
+</body>  
+</html>
+<script type="text/javascript">
+	let dom = document.getElementById('img0');
+	let cycle = document.getElementById('cycle');
+	dom.addEventListener("mouseover",()=>{
+		cycle.className = "pulse anima";
+	});
+	dom.addEventListener("mouseout", ()=>{
+		cycle.className = "pulse";
+	})
+</script>

@@ -1,0 +1,28 @@
+<script type="text/javascript">
+function CurryIt(func) {
+	let args = [];
+	function _func(...arr) {
+		arr.forEach(v=>args.push(v));
+    console.log(args);
+		return _func;
+	}
+	_func.valueOf = function(){
+		let result = func(...args);
+    //console.log(args);
+		args = [];
+		return result;
+	}
+	return _func;
+}
+function adder () {
+  return [].slice.call(arguments).reduce(function(a,b){return a + b},0);
+}
+var curryAdder = CurryIt(adder);
+
+curryAdder(1);
+curryAdder(99);
+console.log(curryAdder() == 100);
+curryAdder(1);
+curryAdder(5);
+console.log(curryAdder() == 6);
+</script>
