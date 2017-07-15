@@ -1,28 +1,24 @@
 <script type="text/javascript">
 function CurryIt(func) {
 	let args = [];
-	function _func(...arr) {
-		arr.forEach(v=>args.push(v));
-    console.log(args);
-		return _func;
+	let context = null;
+	return function() {
+		if (!context) context = this;
+		if (arguments.length > 0) {
+			args.push.apply(args, arguments);
+		} else {
+			let result = func.apply(context, args);
+			args = [];
+			return result;
+		}
 	}
-	_func.valueOf = function(){
-		let result = func(...args);
-    //console.log(args);
-		args = [];
-		return result;
-	}
-	return _func;
 }
-function adder () {
-  return [].slice.call(arguments).reduce(function(a,b){return a + b},0);
-}
-var curryAdder = CurryIt(adder);
+var curryReduce = CurryIt(Array.prototype.reduce);
 
-curryAdder(1);
-curryAdder(99);
-console.log(curryAdder() == 100);
-curryAdder(1);
-curryAdder(5);
-console.log(curryAdder() == 6);
+var exampleArray = [2,3,4]
+curryReduce.call(exampleArray, function(a,b){
+  return a + b;
+});
+curryReduce(8);//8 is the second arg of the method 'reduce', -- initial value of iteration!
+console.log(curryReduce());
 </script>
