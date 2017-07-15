@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+</body>
+</html>
+<script type="text/javascript">
+// 一个新闻模块来体现组合模式设计模式
+// 新闻内容是根据用户平时关注的内容挖掘的，因此有些人会显示文字新闻，有些人会是图片新闻，或者是直播链接
+// 工程的需求会经常变动：
+// 添加一条文字新闻
+// 添加一条带有直播图标的文字新闻
+// 添加一条已经分类的文字新闻
+// 添加一条图片新闻
+// 把图片新闻和文字新闻放在一行
+// 等等。。。
+function News() {
+	this.children = [];
+	this.element = null;
+}
+News.prototype = {
+	init() {
+		throw new Error('please override this method');
+	},
+	add() {
+		throw new Error('please override this method');
+	},
+	getElement() {
+		throw new Error('please override this method');
+	},
+}
+function Container(id, parent) {
+	News.call(this);
+	this.id = id;
+	this.parent = parent;
+	this.init();
+}
+inheritPrototype(Container, News);
+Container.prototype.init = function() {
+	this.element = document.createElement('ul');
+	this.element.id = this.id;
+	this.element.className = 'new-container';
+};
+Container.prototype.add = function(child) {
+	this.children.push(child);
+	this.element.appendChild(child.getElement());
+	return this;
+};
+Container.prototype.getElement = function() {
+	return this.element;
+}
+Container.prototype.show = function() {
+	this.parent.appendChild(this.element);
+};
+function Item(className = '') {
+	News.call(this);
+	this.className = className;
+	this.init();
+}
+inheritPrototype(Item, News);
+Item.prototype.init = function() {
+	this.element = document.createElement('li');
+	this.element.className = this.className;
+}
+Item.prototype.add = function(child) {
+	this.children.push(child);
+	this.element.appendChild(child.getElement());
+	return this;
+}
+Item.prototype.getElement = function() {
+	return this.element;
+}
+
+function NewsGroup(className = '') {
+	News.call(this);
+	this.className = className;
+	this.init();
+}
+inheritPrototype(NewsGroup, News);
+NewsGroup.prototype.init = function() {
+	this.element = document.createElement("div");
+	this.element.className = this.className;
+};
+NewsGroup.prototype.add = function(child) {
+	this.children.push(child);
+	this.element.appendChild(child.getElement());
+	return this;
+};
+NewsGroup.prototype.getElement = function() {
+	return this.element;
+}
+//lowest level components
+function ImageNews(url = '', href = '#', className = 'normal') {
+	News.call(this);
+	this.href = href;
+	this.url = url;
+	this.className = className;
+	this.init();
+}
+inheritPrototype(ImageNews, News);
+ImageNews.prototype.init = function() {
+	this.element = document.createElement('a');
+	let img = new Image();
+	img.src = this.url;
+	this.element.appendChild(img);
+	this.element.className = 'image-news ' + this.className;
+	this.element.href = this.href;
+}
+ImageNews.prototype.add = function() {
+	throw new Error('lowest level component can not add child!');
+}
+ImageNews.prototype.getElement = function() {
+	return this.element;
+}
+function IconNews(text = '', href = '#', type = 'video') {
+	News.call(this);
+	this.text = text;
+	this.href = href;
+	this.type = type;
+	this.init();
+}
+inheritPrototype(IconNews, News);
+IconNews.prototype.init = function() {
+	this.element = document.createElement('a');
+	this.element.innerHTML = this.text;
+	this.element.href = this.href;
+	this.element.className = 'icon ' + this.type;
+}
+IconNews.prototype.add = function() {
+	throw new Error('lowest level component can not add child!');
+}
+IconNews.prototype.getElement = function() {
+	return this.element;
+};
+
+function EasyNews(text = '', href = '#') {
+	News.call(this);
+	this.href = href;
+	this.text = text;
+	this.init();
+}
+inheritPrototype(EasyNews, News);
+EasyNews.prototype.init = function() {
+	this.element = document.createElement('a');
+	this.element.innerHTML = this.text;
+	this.element.className = 'text';
+}
+EasyNews.prototype.add = function() {
+	throw new Error('lowest level component can not add child!');
+};
+EasyNews.prototype.getElement = function() {
+	return this.element;
+}
+function TypeNews(text = '', href = '#', type = '', pos = 'left') {
+	News.call(this);
+	this.text = text;
+	this.href = href;
+	this.type = type;
+	this.pos = pos;
+	this.init();
+}
+inheritPrototype(TypeNews, News);
+TypeNews.prototype.init = function() {
+	this.element = document.createElement('a');
+	if(this.pos == 'left') {
+		this.element.innerHTML = '[' + this.type + ']' + this.text;
+	} else {
+		this.element.innerHTML = this.text + '[' + this.type + ']';
+	}
+	this.element.href = this.href;
+	this.element.className = 'text';
+}
+TypeNews.prototype.add = function() {
+	throw new Error('lowest level component can not add child!');
+};
+TypeNews.prototype.getElement = function() {
+	return this.element;
+}
+
+
+function inheritPrototype(son, father) {
+	let obj = Object.assign({}, father.prototype);
+	obj.constructor = father;
+	son.prototype = obj;
+}
+
+let news1 = new Container('news', document.body);
+news1.add(
+	new Item('normal').add(
+		new IconNews('梅西不拿金球也伟大', '#', 'video'))
+	).add(
+	new Item('normal').add(
+		new IconNews('保护国家强队用意明显', '#', 'live'))
+	).add(
+	new Item('normal').add(
+		new NewsGroup('has-img').add(
+			new ImageNews('1.jpg', '#', 'small')
+			).add(
+			new EasyNews('从240斤盘子成功变型男', '#')
+			).add(
+			new EasyNews('五大雷人跑步机', '#')))
+	).add(
+	new Item('normal').add(
+		new TypeNews('AK47不愿为费城打球', '#', 'NBA', 'left'))
+	).add(
+	new Item('normal').add(
+		new TypeNews('火炮飚6三分创新高', '#', 'CBA', 'right'))
+	).show();
+
+</script>
