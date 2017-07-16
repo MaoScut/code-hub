@@ -1,0 +1,128 @@
+<script type="text/javascript">
+function multiply(n, o){
+	let m1 = analyzeNum(n);
+	let m2 = analyzeNum(o);
+	let result = [0];
+	if(m1.data.length < m2.data.length) [m1, m2] = [m2, m1];
+	let len2 = m2.data.length - 1;
+	for (var i = len2; i >= 0; i--) {
+		let currentResult = arrayMultiplyN(m1.data, m2.data[i]).concat(Array(len2 - i).fill(0));
+		console.log('middle: ', currentResult);
+		arrayAdd(result, currentResult);
+	}
+	let digitalNum = m1.precison + m2.precison;
+	if(result.length <= digitalNum) result.unshift(...Array(digitalNum - result.length +1).fill(0));
+	if(digitalNum > 0) result.splice(result.length - digitalNum, 0, '.');
+
+	let startIndex = 0;
+	let endIndex = result.length;
+	let isDecimal = result.indexOf('.') == -1 ? false : true;
+	for (let i = 0, j = result.length; i < j; i ++){
+		if(result[i] == '0') startIndex ++;
+		else break;
+	}
+	for (var i = result.length - 1; i >= 0; i--) {
+		if(result[i] == '0' && isDecimal) endIndex --; 
+		else break;
+	}
+	result = result.slice(startIndex, endIndex);
+	if(result.length == 1 && result[0] == '.' || result.length == 0) {
+		return '0';
+	}
+	if(result[0] == '.') result.unshift(0);
+	if(result[result.length-1] == '.') result.pop();
+	if(m1.isMinus * m2.isMinus == -1) {
+		return '-' + result.join('');
+	} else {
+		return result.join('');
+	} 
+}
+function arrayMultiplyN(arr, n) {
+	let override = 0;
+	let _arr = arr.slice();
+	for (var i = _arr.length - 1; i >= 0; i--) {
+		let result = _arr[i] * Number(n) + override;
+		if(result >= 10 ) {
+			_arr[i] = result % 10;
+			override = Math.floor(result / 10);
+		} else {
+			override = 0;
+			_arr[i] = result;
+		}
+	}
+	if (override > 0) _arr.unshift(override);
+	return _arr;
+}
+function analyzeNum(str) {
+	let startIndex = 0;
+	let atHead = true;
+	let endIndex = str.length;
+	let dotPos = 0;
+	let isDecimal = str.indexOf('.') == -1 ? false : true;
+	let isMinus = str[0] == '-' ? -1 : 1;
+	if(str[0] == '-') str = str.slice(1);
+	for (let i = 0, j = str.length; i < j; i ++){
+		if(str[i] == '0') startIndex ++;
+		else break;
+	}
+	for (var i = str.length - 1; i >= 0; i--) {
+		if(str[i] == '0' && isDecimal) endIndex --; 
+		else break;
+	}
+	let strSlice = str.slice(startIndex, endIndex);
+	if(strSlice == '') strSlice = '0';
+	dotPos = strSlice.indexOf('.');
+	if(dotPos !== -1) {
+		let decimalNum = strSlice.length -1 -dotPos;
+		let tempArr = strSlice.split('');
+		tempArr.splice(dotPos, 1);
+		if(tempArr.length == 0) tempArr = [0];
+		return {
+			data: tempArr,
+			precison: decimalNum,
+			isMinus: isMinus,
+		}
+
+	}
+	else {
+		return {
+			data: strSlice.split(''),
+			precison: 0,
+			isMinus: isMinus,
+		}
+		dotPos = dotPos == -1 ? 0 : strSlice.length -1 - dotPos;
+	}
+}
+function arrayAdd(arr1, arr2) {
+	//fill shorter arr with 0
+	let len1 = arr1.length;
+	let len2 = arr2.length;
+	if(len1 < len2) {
+		arr1.unshift(...Array(len2 - len1).fill(0));
+	} else {
+		arr2.unshift(...Array(len1 - len2).fill(0));
+	}
+	let override = 0;
+	for (var i = arr1.length - 1; i >= 0; i--) {
+		let sum = arr1[i] + arr2[i] + override;
+		if(sum >= 10) {
+			arr1[i] = sum % 10;
+			override = Math.floor(sum / 10);
+		} else {
+			override = 0;
+			arr1[i] = sum; 
+		}		
+	}
+	if(override > 0) arr1.unshift(override);
+	return arr1;
+}
+// console.log('0.1: ', analyzeNum('0.1'));
+// console.log('0.0: ', analyzeNum('0.0'));
+// console.log('000.01100: ', analyzeNum('000.01100'));
+// console.log('2.3: ', analyzeNum('2.3'));
+// console.log(arrayMultiplyN(['5', '2', '3'], 2));
+// console.log(arrayMultiplyN(['2', '2', '3'], 2));
+// console.log(arrayAdd([9,2,4], [2,5,5]));
+// console.log(arrayAdd([4,4,4,4,4,4], [6,5,5,5,5]));
+console.log(multiply('00.0908', '0.01'));
+</script>
