@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<div id = 'newsContainer'></div>
+<button id = 'nextPage'>next</button> 
+</body>
+</html>
+<script type="text/javascript">
+// 对于具有列表的页面，由于用户看的条目有限，没有必要每个条目都一个节点，应该是所有条目共享几个节点，通过下一页来调整节点的内容
+function Flyweight(parentId, visiableNum) {
+	let created = [];
+	function create() {
+		let dom = document.createElement('div');
+		document.getElementById(parentId).appendChild(dom);
+		created.push(dom);
+		return dom;
+	}
+	return {
+		getDiv: function() {
+			if(created.length < visiableNum) return create();
+			else {
+				let div = created.shift();
+				created.push(div);
+				return div;
+			}
+		}
+	}
+}
+let article = [];
+for(let i = 0; i < 20; i ++) {
+	article.push('news' + i);
+}
+let paper = 0, num = 5, len = article.length;
+let flyweight = Flyweight('newsContainer', 5);
+for (let i = 0; i < num; i++) {
+	if(article[i])
+		flyweight.getDiv().innerHTML = article[i];
+}
+document.getElementById('nextPage').onclick = function() {
+	if (article.length < 5)
+		return;
+	let n = ++ paper * num % len;
+	for (let j = 0; j < num; j ++) {
+		if(article[n + j])
+			flyweight.getDiv().innerHTML = article[n + j];
+		else
+			if (article[n + j - len])
+				flyweight.getDiv.innerHTML = article[n + j -len];
+			else
+				flyweight.getDiv.innerHTML = '';
+	}
+
+}
+</script>
