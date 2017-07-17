@@ -1,0 +1,111 @@
+<script type="text/javascript">
+
+function outerEdgesOf(arr){
+  // returns an array with the same dimensions as arr.
+  // where the outer edges of the features of arr are highlighted (1)
+  let waitForFill = [];
+  for(let i = 0; i < arr.length; i ++) {
+  	for (let j = 0; j < arr[0].length; j ++) {
+  		if(arr[i][j] == 0 && isEdge(arr, i, j)) waitForFill.push([i, j]);
+  	}
+  }
+  let result = zeroImage(arr.length, arr[0].length);
+  waitForFill.forEach(v=>result[v[0]][v[1]] = 1);
+  return result;
+}
+
+function innerEdgesOf(arr){
+  // returns an array with the same dimensions as arr.
+  // where the inner edges of the features of arr are highlighted (1)
+  let copy = zeroImage(arr.length, arr[0].length);
+  for (let i = 0; i<arr.length; i++) {
+  	for(let j =0; j<arr[0].length; j ++){
+  		copy[i][j] = arr[i][j];
+  	}
+  }
+  let waitForCancel = [];
+  for(let i = 0; i < arr.length; i ++) {
+  	for(let j = 0; j < arr[0].length; j ++) {
+  		if(arr[i][j] ==1 && isAround(arr, i, j)) waitForCancel.push([i, j]);
+  	}
+  }
+  waitForCancel.forEach(v=>{
+  	copy[v[0]][v[1]] = 0;
+  });
+  return copy;
+}
+
+function grow(arr){
+  // returns an array with the same dimensions as arr.
+  // where the the features have grown
+  let outerImage = outerEdgesOf(arr);
+    for(let i = 0; i < arr.length; i ++) {
+  	for(let j = 0; j < arr[0].length; j ++) {
+  		if(arr[i][j] ==1) outerImage[i][j] =1;
+  	}
+  }
+  return outerImage;
+}
+
+function shrink(arr){
+  // returns an array with the same dimensions as arr.
+  // where the the features have shrunk
+  let copy = zeroImage(arr.length, arr[0].length);
+  for (let i = 0; i<arr.length; i++) {
+  	for(let j =0; j<arr[0].length; j ++){
+  		copy[i][j] = arr[i][j];
+  	}
+  }
+    let innerImage = innerEdgesOf(arr);
+    for(let i = 0; i < arr.length; i ++) {
+  	for(let j = 0; j < arr[0].length; j ++) {
+  		if(innerImage[i][j] ==1) copy[i][j] = 0;
+  	}
+  }
+  return copy;
+}
+function isAround(arr,i,j) {
+	let candidate = [[i-1, j-1], [i-1, j], [i-1, j+1], [i, j+1], [i+1, j+1], [i+1, j], [i+1, j-1], [i, j-1]];
+	return candidate.every(v=>arr[v[0]][v[1]] == 1);
+}
+function isEdge(arr, i , j) {
+	let candidate = [[i-1, j-1], [i-1, j], [i-1, j+1], [i, j+1], [i+1, j+1], [i+1, j], [i+1, j-1], [i, j-1]];
+	return candidate.some(v=>{
+		if(v[0]==-1 || v[0]==arr.length || v[1]==-1 || v[1]==arr[0].length) return false;
+		else {
+			if(arr[v[0]] == undefined) debugger;
+			return arr[v[0]][v[1]] == 1;
+		}
+	});
+}
+function reverseArr(arr) {
+	for(let i = 0; i < arr.length; i ++) {
+		for (let j = 0; j < arr[0].length; j ++) {
+			arr[i][j] = arr[i][j] == 1 ? 0 : 1;
+		}
+	}
+}
+function zeroImage(r, c) {
+	let result = [];
+	for(let i = 0; i < r; i ++) {
+		result.push(Array(c).fill(0));
+	}	
+	return result;
+}
+var grow_b = [[0,0,0,0,0],
+[0,1,1,1,0],
+[0,1,1,1,0],
+[0,1,1,1,0],
+[0,0,0,0,0]];
+var b = [[0,0,0,0,0],
+[0,0,0,0,0],
+[0,0,1,0,0],
+[0,0,0,0,0],
+[0,0,0,0,0]]
+// let arr1 = innerEdgesOf(grow_b);
+// let arr1 = outerEdgesOf(grow_b);
+// let arr1 = shrink(grow_b);
+let arr1 = grow(b);
+// grow_b.forEach(v=>console.log(v));
+arr1.forEach(v=>console.log(v));
+</script>
