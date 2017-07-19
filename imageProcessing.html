@@ -66,7 +66,10 @@ function shrink(arr){
 }
 function isAround(arr,i,j) {
 	let candidate = [[i-1, j-1], [i-1, j], [i-1, j+1], [i, j+1], [i+1, j+1], [i+1, j], [i+1, j-1], [i, j-1]];
-	return candidate.every(v=>arr[v[0]][v[1]] == 1);
+	return candidate.every(v=>{
+		if(v[0]==-1 || v[0]==arr.length || v[1]==-1 || v[1]==arr[0].length) return false;
+		else return arr[v[0]][v[1]] == 1
+	});
 }
 function isEdge(arr, i , j) {
 	let candidate = [[i-1, j-1], [i-1, j], [i-1, j+1], [i, j+1], [i+1, j+1], [i+1, j], [i+1, j-1], [i, j-1]];

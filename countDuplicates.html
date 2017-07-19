@@ -1,0 +1,26 @@
+<script type="text/javascript">
+function duplicateCount(text) {
+	let result = [];
+	let obj = {};
+	text.toLowerCase().split('').forEach(v => {
+		switch (obj[v]) {
+			case undefined:
+				obj[v] = 1;
+				break;
+			case 1:
+				result.push(v);
+				obj[v]++;
+				break;
+			default:
+				obj[v]++;
+		}
+	});
+	return result.length;
+}
+duplicateCount("");
+duplicateCount("abcde");
+duplicateCount("aabbcde");
+duplicateCount("aabBcde");
+duplicateCount("Indivisibility");
+duplicateCount("Indivisibilities");
+</script>
