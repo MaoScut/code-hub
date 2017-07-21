@@ -1,0 +1,161 @@
+<script type="text/javascript">
+function parseMolecule(formula) {
+	// do your science here
+	let stack = [];
+	let formulaArr = null;
+	formulaArr = linkArrNum(formula.split(''));
+
+	formulaArr.forEach(v => {
+		stackPopOrPush(stack, v);
+	});
+	return stack.reduce((pre, v) => {
+		pre = add(pre, v);
+		return pre;
+	}, {});
+}
+
+function stackPopOrPush(stack, v) {
+	switch (getCharType(v)) {
+		case 'number':
+			if (getTop(stack) == ')') {
+				stack.pop();
+				let result = {};
+				while (getTop(stack) !== '(') {
+					let top = stack.pop();
+					muti(top, v);
+					result = add(result, top);
+				}
+				stack.pop();
+				stack.push(result);
+			} else {
+				if (getTop(stack) == ']') {
+					stack.pop();
+					let result = {};
+					while (getTop(stack) !== '[') {
+						let top = stack.pop();
+						muti(top, v);
+						result = add(result, top);
+					}
+					stack.pop();
+					stack.push(result);
+				} else {
+					if (getTop(stack) == '}') {
+						stack.pop();
+						let result = {};
+						while (getTop(stack) !== '{') {
+							let top = stack.pop();
+							muti(top, v);
+							result = add(result, top);
+						}
+						stack.pop();
+						stack.push(result);
+					} else {
+						stack.push(muti(stack.pop(), v))
+					}
+				}
+			}
+			break;
+		case 'lowerCaseLetter':
+			let top = stack.pop();
+			let K = v;
+			for (let k in top) {
+				K = k + K;
+			}
+			let obj2 = {};
+			obj2[K] = 1;
+			stack.push(obj2);
+			break;
+		case '(':
+			stack.push('(');
+			break;
+		case '[':
+			stack.push('[');
+			break;
+		case ')':
+			stack.push(')');
+			break;
+		case ']':
+			stack.push(']');
+			break;
+		case '{':
+			stack.push('{');
+			break;
+		case '}':
+			stack.push('}');
+			break;
+
+		default:
+			let obj = {};
+			obj[v] = 1;
+			stack.push(obj);
+	}
+}
+
+function getCharType(c) {
+	if (!isNaN(parseInt(c))) return 'number';
+	else {
+		if (c >= 'A' && c <= 'Z') return 'letter';
+		else {
+			if (c >= 'a' && c <= 'z') return 'lowerCaseLetter';
+			else return c;
+		}
+	}
+}
+
+function muti(stackObj, v) {
+	for (let k in stackObj) {
+		stackObj[k] *= v;
+	}
+	return stackObj;
+}
+
+function getTop(stack) {
+	return stack[stack.length - 1];
+}
+
+function add(result, obj) {
+	for (let k in result) {
+		if (k in obj) {
+			result[k] += obj[k];
+		}
+	}
+	let r = Object.assign(obj, result);
+	return r;
+
+}
+
+function linkArrNum(arr) {
+	let _arr = [];
+	for (let i = 0; i < arr.length; i++) {
+		if (!isNaN(parseInt(arr[i]))) {
+			if (!isNaN(parseInt(getTop(_arr)))) {
+				let top = _arr.pop();
+				top = Number(top.toString() + arr[i]);
+				_arr.push(top);
+			} else {
+				_arr.push(arr[i]);
+			}
+		} else {
+			_arr.push(arr[i]);
+		}
+	}
+	let index = [];
+	let fixObj = {
+		')': true,
+		']': true,
+		'}': true
+	}
+	for (let i = 0; i < _arr.length - 1; i++) {
+		if (_arr[i] in fixObj) {
+			if (isNaN(parseInt(_arr[i + 1]))) index.push(i);
+		}
+	}
+	// let count = 0;
+	for (let i = 0; i < index.length; i++) {
+		_arr.splice(index[i] + 1 + i, 0, 1)
+	}
+	return _arr;
+}
+var fremySalt = 'As2{Be4C5[BCo3(CO2)3]2}4Cu5';
+console.log(parseMolecule(fremySalt));
+</script>
