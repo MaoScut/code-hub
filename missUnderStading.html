@@ -1,0 +1,62 @@
+<img src="" onerror="alert(1)" />
+<script type="text/javascript">
+// misjudge on if condiction
+// // note variable promotion
+// if (! 'a' in window) {
+// 	var a = 1;
+// }
+// alert(a);
+
+// //statement 'var a = b = 3', only redeclare 'a'!
+// var a, b;
+// (function() {
+// 	alert(a);
+// 	alert(b);
+// 	var a = b = 3;
+// 	alert(a);
+// 	alert(b);
+// })();
+// alert(a);
+// alert(b);
+
+// //f is just a object, not a function!
+// var F = function() {};
+// Object.prototype.a = function() {};
+// Function.prototype.b = function() {};
+// var f = new F();
+// f.a();y f.b();n
+// F.a();y F.b();y
+
+//although a declared function will be promoted, but it will not be noticed if it is behind a '='
+//otherwise to prove the conclution above, you should check that once a varible is settled, statement 'var a; ' will be ignored. 
+// (function() {
+// 	var x = foo();
+// 	var fo = function foo() {
+// 		return 'foobar';
+// 	}
+// 	return x;
+// 	// 	function a() {}
+// 	// var a;
+// 	// console.log(typeof a);
+// })()
+
+//oh no, I take foo.n as argument carelessly!
+// var foo = {
+// 	n: 1
+// };
+// (function(foo) {
+// 	console.log(foo.n);
+// 	foo.n = 3;
+// 	//the statement below causes foo is unrelative to the outer foo!
+// 	foo = {
+// 		n: 2
+// 	};
+// 	foo.n = 100;
+// 	console.log(foo.n);
+// })(foo);
+// console.log('outer foo: ' + foo.n);
+
+// '+' is priorier than '? :'
+var val;
+console.log('value is ' + (val != '0') ? 'defined' : 'undefined');
+</script>
