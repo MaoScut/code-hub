@@ -1,0 +1,146 @@
+<script type="text/javascript">
+// complete the function so that it returns the fastest route 
+function navigate(numberOfIntersections, roads, start, finish) {
+	let result = [start];
+	if(start == finish) return result;
+	function c(i, j) {
+		if(i == j) return 0;
+		let road = roads.filter(v => v.from == i).filter(v => v.to == j);
+		if(road.length > 0) return road[0].drivingTime;
+		else return Infinity;
+	}
+	//
+	// let neighbor = {};
+	// for(let i = 0; i < roads.length; i ++) {
+	// 	if(!neighbor[roads[i].from])
+	// 		neighbor[roads[i].from] = [roads[i].to];
+	// 	else
+	// 		neighbor[roads[i].from].push(roads[i].to);
+	// };
+	// function findMinValueIndex(arr) {
+	// 	// if(arr.length == 1) return 0;
+	// 	let minIndex = 0;
+	// 	let min = arr[0];
+	// 	for (let i = 1; i < arr.length; i ++) {
+	// 		if(arr[i] < min) {
+	// 			min = arr[i];
+	// 			minIndex = i;
+	// 		}
+	// 	}
+	// 	return minIndex;
+	// }
+	// function _navigate(maxEdges, start, finish) {
+	// 	if(start == finish) return 0;
+	// 	if(maxEdges == 1) return c(start, finish);
+	// 	else {
+	// 		let arr = [];
+	// 		for(let i = 0; i < neighbor[start].length; i ++) {
+	// 			arr.push(c(start, neighbor[start][i]) +_navigate(maxEdges-1, neighbor[start][i], finish));
+	// 		}
+	// 		return Math.min(...arr);
+	// 	}
+	// }
+	// return _navigate(numberOfIntersections - 1, start, finish);
+	let maxEdges = numberOfIntersections - 1;
+	let cache = threeDemArr(numberOfIntersections);
+	let springBoard = threeDemArr(numberOfIntersections);
+	for(let e = 1; e <= maxEdges; e ++) {
+		for(let i = 0; i < numberOfIntersections; i ++) {
+			for(let j = 0; j < numberOfIntersections; j ++) {
+				if(e == 1 || i == j) {
+					cache[e][i][j] = c(i, j);
+					springBoard[e][i][j] = j;
+				} else {
+					let min = Infinity;
+					let minIndex = 0;
+					for(let k = 0; k < numberOfIntersections; k ++) {
+						if(k == i) continue;
+						if(cache[1][i][k] + cache[e-1][k][j] < min) {
+							min = cache[1][i][k] + cache[e-1][k][j];
+							minIndex = k;
+						}
+					}
+					// result[j];
+					springBoard[e][i][j] = minIndex;
+					cache[e][i][j] = cache[1][i][minIndex] + cache[e-1][minIndex][j];
+				}
+			}
+		}
+	}
+	// 	for(let e = 1; e <= maxEdges; e ++) {
+	// 	for(let i = 0; i < numberOfIntersections; i ++) {
+	// 		for(let j = 0; j < numberOfIntersections; j ++) {
+	// 			console.log('[' + e + ',' + i + ',' + j + ']' + ':' + cache[e][i][j]);
+	// 		}
+	// 	}
+	// }
+	let s = start;
+	let f = finish;
+	let e = maxEdges;
+	while(springBoard[e][s][f] != finish) {
+		let temp = springBoard[e][s][f];
+		result.push(temp);
+		e--;
+		s = temp;
+	}
+	result.push(finish);
+	let cost = 0;
+	result.reduce((pre, cur) => {
+		cost += c(pre, cur);
+		return cur;
+	});
+	if(!Number.isFinite(cost)) return null;
+	console.log('mine:' + cost);
+	let expect = 0;
+	[0,56,99].reduce((pre, cur) => {
+		expect += c(pre, cur);
+		return cur;
+	});
+	console.log('expect: ' + expect);
+	roads.filter(v => v.from == 0 || v.from == 56 || v.from == 62 ||.v.from == 99).forEach(v => console.log(v));
+	// result.shift();
+	// console.log(cache);
+	return result;
+}
+function threeDemArr(d) {
+	let arr =[];
+	for(let k = 0; k < d; k ++) {
+		arr[k] = [];
+		for (let i = 0; i < d; i ++) {
+			arr[k][i] = [];
+			for (let j = 0; j < d; j++) {
+				arr[k][i][j] = Infinity;
+			}
+		}
+	}
+	return arr;
+}
+
+
+
+
+
+var roads = [
+    {from: 0, to: 1, drivingTime: 5},
+    {from: 0, to: 2, drivingTime: 10},
+    {from: 1, to: 2, drivingTime: 10},
+    {from: 1, to: 3, drivingTime: 2},
+    {from: 2, to: 3, drivingTime: 2},
+    {from: 2, to: 4, drivingTime: 5},
+    {from: 3, to: 2, drivingTime: 2},
+    {from: 3, to: 4, drivingTime: 10}
+];
+	// function c(i, j) {
+	// 	let road = roads.filter(v => v.from == i).filter(v => v.to == j);
+	// 	if(road.length > 0) return road[0].drivingTime;
+	// 	else return Infinity;
+	// }
+	// console.log(c(0, 1) == 5);
+	// console.log(c(2, 4) == 5);
+	// console.log(c(0, 0), c(2, 1));
+// console.log(navigate(5, roads, 0, 4)); 
+// should return [0, 1, 3, 2, 4]. Fastest time is 5 + 2 + 2 + 5 = 14 minutes
+// let cache = Array(5).fill(Array(6).fill(Array(6).fill(Infinity)));
+// console.log(cache);
+console.log(navigate(5, roads, 0, 4));
+</script>
