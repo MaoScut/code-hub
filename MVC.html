@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+</body>
+</html>
+<script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+let MVC = {};
+MVC.model = function() {
+	let M = {};
+	M.data = {
+		slideBar: [{
+			text: 'goku',
+			icon: 'goku_icon.png',
+			content: 'sigle super saiyan 3',
+			img: 'goku.png',
+			href: 'www.baidu.com',
+		}, {
+			text: 'vegita',
+			icon: 'vegita_icon.png',
+			content: 'super saiyan 2 hit virus',
+			img: 'vegita.png',
+			href: 'www.baidu.com',
+		},{
+			text: 'gohan',
+			icon: 'gohan_icon.png',
+			content: 'sigle strongest in chapter buwu',
+			img: 'gohan.png',
+			href: 'www.baidu.com',
+		}, {
+			text: 'virus',
+			icon: 'virus_icon.png',
+			content: 'hit down saiyan 3 easily',
+			img: 'virus.png',
+			href: 'www.baidu.com',
+		}]
+	};
+	M.conf = {
+		slideBarCloseAnimate: false
+	};
+	return {
+		getData: function(m) {
+			return M.data[m];
+		},
+		getConf: function(c) {
+			reutrn M.conf[c];
+		},
+		setData: function(m, v) {
+			M.data[m] = v;
+			return this;
+		},
+		setConf: function(c, v) {
+			M.conf[c] = v;
+			return this;
+		}
+	}
+}();
+
+MVC.view = function() {
+	let M = MVC.model;
+	let V = {
+		createSlideBar: function() {
+			let html = '',
+			data = M.getData('slideBar');
+			if(!data || !data.length) {
+				return;
+			}
+			let $dom = $('<div class="slidebar" id="slidebar"></div>');
+			for(let i = 0; i < data.length; i ++) {
+				html += sliderBarItemString(data[i]);
+			}
+			let container = $(sliderContainerString(html));
+			$dom.html(container);
+			$(body).append($dom);
+		}
+	};
+	return function(v) {
+		V[v]();
+	}
+}();
+
+MVC.ctrl = function() {
+	let M = MVC.model;
+	let V = MVC.view;
+	let C = {
+		initSlideBar: function() {
+			V('createSlideBar');
+			$('#slidebar').find('li')
+			.bind('mouseover', function(e) {
+				$(this).addClass('show');
+			})
+			.bind('mouseout', function(e) {
+				$(this).removeClass('show');
+			});
+			$('#sliderbar').find('.slidebar-close')
+			.bind('click', function(e) {
+				if(M.getConf('slideBarCloseAnimate')) {
+					return false;
+				}
+				M.setConf('slideBarCloseAnimate', true);
+				let $this = $(this);
+				if($this.hasClass('is-close')) {
+					$('#slidebar').find('.slidebar-inner')
+					.animate({
+						duration: 800,
+						type: 'easeOutQuart',
+						main: function(dom) {
+							dom.css('left', -50 + this.tween * 50 + 'px');
+						},
+						end: function() {
+							$this.removeClass('is-close');
+							M.setConf('slideBarCloseAnimate', false);
+						}
+					})
+				} else {
+					$('.slidebar-inner', 'slidebar')
+					.animate({
+						duration: 800,
+						type: 'easeOutQuart',
+						main: function(dom) {
+							dom.css('left', this.tween * -50 + 'px');
+						},
+						end: function() {
+							$this.addClass('is-close');
+							M.setConf('slideBarCloseAnimate', false)
+						}
+					})
+				}
+			})
+		}
+	};
+	C.initSlideBar();
+}();
+function sliderBarItemString(data) {
+	return `<li><a href=${data.href} class="icon"></a><img src="common/img/${data.icon}" alt="" /><span>${data.text}</span><div><div><a href=${data.href} class="title">${data.title}</a><a href=${data.href}>${data.content}</a></div><a class='image' href=${data.href}><img src="common/img/${data.img}" alt="" /></a></div>	</li>`
+}
+function sliderContainerString(content) {
+	return `<div class="sliebar-inner"><ul>${content}</ul></div><a href="#" hidefocus="" class="slidebar-close" title="shrink"></a>`
+}
+</script>
