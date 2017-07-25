@@ -2,6 +2,65 @@
 <html>
 <head>
 	<title></title>
+	<style type="text/css">
+		.icon img{
+			border-radius: 50%;
+			width: 5em;
+		}
+		.icon p{
+			margin: 0;
+		}
+		.icon{
+			text-align: center;
+		}
+		.image img{		
+			width: 102px;	
+		}
+		.image{
+			position: absolute;
+			top: 0;
+			right: 0;
+		}
+		li>div{
+    height: 100%;
+    width: 17em;
+    position: absolute;
+    top: 0;
+    background-color: lightblue;
+    left: 5em;
+    padding-left: 1em;
+		}
+		li{
+			position: relative;
+		}
+		#slidebar{
+			position: relative;
+			width: 5em;
+			
+		}
+		ul{
+			list-style-type: none;
+			padding: 0;
+		}
+/*		.is-close{
+			left: -50px;
+		}*/
+/*		.slidebar-close-btn{
+			position: absolute;
+			right: 0;
+		}*/
+		.hidden{
+			display: none;
+		}
+		.slidebar-inner{
+			position: relative;
+			background-color: lightblue;
+		}
+		body,html{
+			margin: 0;
+			padding: 0;
+		}
+	</style>
 </head>
 <body>
 </body>
@@ -14,27 +73,31 @@ MVC.model = function() {
 	M.data = {
 		slideBar: [{
 			text: 'goku',
-			icon: 'goku_icon.png',
+			icon: 'goku.jpg',
 			content: 'sigle super saiyan 3',
-			img: 'goku.png',
+			title: 'dragron ball',
+			img: 'goku.jpg',
 			href: 'www.baidu.com',
 		}, {
 			text: 'vegita',
-			icon: 'vegita_icon.png',
+			icon: 'vegita.jpg',
 			content: 'super saiyan 2 hit virus',
-			img: 'vegita.png',
+			title: 'dragron ball',
+			img: 'vegita.jpg',
 			href: 'www.baidu.com',
 		},{
 			text: 'gohan',
-			icon: 'gohan_icon.png',
-			content: 'sigle strongest in chapter buwu',
-			img: 'gohan.png',
+			icon: 'gohan.jpg',
+			content: 'sigle strongest twice',
+			title: 'dragron ball',
+			img: 'gohan.jpg',
 			href: 'www.baidu.com',
 		}, {
 			text: 'virus',
-			icon: 'virus_icon.png',
+			icon: 'virus.jpg',
 			content: 'hit down saiyan 3 easily',
-			img: 'virus.png',
+			title: 'dragron ball',
+			img: 'virus.jpg',
 			href: 'www.baidu.com',
 		}]
 	};
@@ -46,7 +109,7 @@ MVC.model = function() {
 			return M.data[m];
 		},
 		getConf: function(c) {
-			reutrn M.conf[c];
+			return M.conf[c];
 		},
 		setData: function(m, v) {
 			M.data[m] = v;
@@ -74,7 +137,7 @@ MVC.view = function() {
 			}
 			let container = $(sliderContainerString(html));
 			$dom.html(container);
-			$(body).append($dom);
+			$(document.body).append($dom);
 		}
 	};
 	return function(v) {
@@ -90,44 +153,44 @@ MVC.ctrl = function() {
 			V('createSlideBar');
 			$('#slidebar').find('li')
 			.bind('mouseover', function(e) {
-				$(this).addClass('show');
+				$(this).find('div').removeClass('hidden');
 			})
 			.bind('mouseout', function(e) {
-				$(this).removeClass('show');
+				$(this).find('div').addClass('hidden');
 			});
-			$('#sliderbar').find('.slidebar-close')
+			$('#slidebar').find('.slidebar-close-btn')
 			.bind('click', function(e) {
-				if(M.getConf('slideBarCloseAnimate')) {
-					return false;
-				}
+				// if(M.getConf('slideBarCloseAnimate')) {
+				// 	return false;
+				// }
 				M.setConf('slideBarCloseAnimate', true);
-				let $this = $(this);
-				if($this.hasClass('is-close')) {
+				let $slidebarInner = $('#slidebar').find('.slidebar-inner');
+				if($slidebarInner.hasClass('is-close')) {
 					$('#slidebar').find('.slidebar-inner')
 					.animate({
-						duration: 800,
-						type: 'easeOutQuart',
-						main: function(dom) {
-							dom.css('left', -50 + this.tween * 50 + 'px');
-						},
-						end: function() {
-							$this.removeClass('is-close');
-							M.setConf('slideBarCloseAnimate', false);
-						}
+						left: 0,
+					},() => {
+						$slidebarInner.removeClass('is-close');
 					})
 				} else {
-					$('.slidebar-inner', 'slidebar')
+										$('#slidebar').find('.slidebar-inner')
 					.animate({
-						duration: 800,
-						type: 'easeOutQuart',
-						main: function(dom) {
-							dom.css('left', this.tween * -50 + 'px');
-						},
-						end: function() {
-							$this.addClass('is-close');
-							M.setConf('slideBarCloseAnimate', false)
-						}
+						left: '-7em',
+					}, () => {
+						$slidebarInner.addClass('is-close');
 					})
+					// $('.slidebar-inner', 'slidebar')
+					// .animate({
+					// 	duration: 800,
+					// 	type: 'easeOutQuart',
+					// 	main: function(dom) {
+					// 		dom.css('left', this.tween * -50 + 'px');
+					// 	},
+					// 	end: function() {
+							// $this.addClass('is-close');
+					// 		M.setConf('slideBarCloseAnimate', false)
+					// 	}
+					// })
 				}
 			})
 		}
@@ -135,9 +198,9 @@ MVC.ctrl = function() {
 	C.initSlideBar();
 }();
 function sliderBarItemString(data) {
-	return `<li><a href=${data.href} class="icon"></a><img src="common/img/${data.icon}" alt="" /><span>${data.text}</span><div><div><a href=${data.href} class="title">${data.title}</a><a href=${data.href}>${data.content}</a></div><a class='image' href=${data.href}><img src="common/img/${data.img}" alt="" /></a></div>	</li>`
+	return `<li><a href=${data.href} class="icon"><img src="common/img/${data.icon}" alt="" /><p>${data.text}</p></a><div class='hidden'><div><p href=${data.href} class="title">${data.title}</p><a href=${data.href}>${data.content}</a></div><a class='image' href=${data.href}><img src="common/img/${data.img}" alt="" /></a></div>	</li>`
 }
 function sliderContainerString(content) {
-	return `<div class="sliebar-inner"><ul>${content}</ul></div><a href="#" hidefocus="" class="slidebar-close" title="shrink"></a>`
+	return `<div class="slidebar-inner"><ul>${content}</ul></div><button class="slidebar-close-btn">shrink</button>`
 }
 </script>
