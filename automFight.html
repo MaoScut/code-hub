@@ -1,0 +1,23 @@
+<script type="text/javascript">
+//achieve indexOf(array method)
+//how about string method?
+function indexOf(arr, s) {
+	if(Array.prototype.indexOf)
+		return arr.indexOf(s);
+	else {
+		for(let i = 0, j = arr.length; i < j; i ++) {
+			if(arr[i] === s)
+				return i;
+		}
+		return -1;
+	}
+}
+//array sum
+function sum(arr) {
+	// if(arr.length == 0) return 0;
+	// else
+		return arr.reduce((pre,cur) => pre + cur);
+}
+let testArr = [1,2,3,4,8];
+sum([]);
+</script>
