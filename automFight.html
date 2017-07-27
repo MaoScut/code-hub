@@ -1,3 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+div{border:2px #CC0000 solid; overflow:hidden;}
+div span{ display:inline-block;
+width:120px; 
+height:20px; 
+border:2px #0000FF solid;
+background-image:url(2016.jpg); 
+background-repeat:no-repeat;
+padding-left:20px; padding-top:120px;
+margin-top:-110px;}
+	</style>
+</head>
+<body>
+	<!-- <img src="2016.jpg"> -->
+	<p>!!!!!!!!!!!!</p>
+	<div>
+<span>没有百合账号？</span><a href="#">立即注册</a>
+</div>
+</body>
+</html>
 <script type="text/javascript">
 //achieve indexOf(array method)
 //how about string method?
@@ -85,25 +109,25 @@
 // 	console.log('cancel!');
 // 	b.cancel();
 // }, 5000)
+
 // curryIt
-function curryIt(fn) {
-	let args = [];
-	return function _fn(a) {
-		args.push(a);
-		if(args.length < fn.length){
-			return _fn;
-		}
-		else 
-			return fn(...args);
-	}
-}
-function f1(a, b, c) {
-	Array.from(arguments).forEach(v => console.log(v));
-}
-// f1(1,2,3);
-let a = curryIt(f1);
-let b = a(1);
-let c = b(2);
-console.log(c(3));
+// function curryIt(fn) {
+// 	let args = [];
+// 	return function _fn(a) {
+// 		args.push(a);
+// 		if(args.length < fn.length){
+// 			return _fn;
+// 		}
+// 		else 
+// 			return fn(...args);
+// 	}
+// }
+// function f1(a, b, c) {
+// 	Array.from(arguments).forEach(v => console.log(v));
+// }
+// let a = curryIt(f1);
+// let b = a(1);
+// let c = b(2);
+// console.log(c(3));
 
 </script>
