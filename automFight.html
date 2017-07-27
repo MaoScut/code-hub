@@ -1,23 +1,109 @@
 <script type="text/javascript">
 //achieve indexOf(array method)
 //how about string method?
-function indexOf(arr, s) {
-	if(Array.prototype.indexOf)
-		return arr.indexOf(s);
-	else {
-		for(let i = 0, j = arr.length; i < j; i ++) {
-			if(arr[i] === s)
-				return i;
+// function indexOf(arr, s) {
+// 	if(Array.prototype.indexOf)
+// 		return arr.indexOf(s);
+// 	else {
+// 		for(let i = 0, j = arr.length; i < j; i ++) {
+// 			if(arr[i] === s)
+// 				return i;
+// 		}
+// 		return -1;
+// 	}
+// }
+//array sum, check wheather is empty or not
+// function sum(arr) {
+// 	if(arr.length == 0) return 0;
+// 	else
+// 		return arr.reduce((pre,cur) => pre + cur);
+// }
+// let testArr = [1,2,3,4,8];
+// sum([]);
+
+//when does the obj have the constructor property?
+//so it is before constructor excution
+// Father.prototype.b = 1;
+// function Father() {
+// 	console.log(this.constructor);
+// 	console.log(this.b);
+// 	this.a = 0;
+// }
+// let father = new Father();
+
+//transform rgb(255, 255, 255) to #ffffff
+// function rgbTo16(rgbFormatStr) {
+// 	let reg = /rgb\((\d+),\s*(\d+),\s*(\d+)/;
+// 	let mResult = rgbFormatStr.match(reg);
+// 	if(! mResult) return rgbFormatStr;
+// 	let str16 = '#';
+// 	for (let i = 1; i < 4; i ++) {
+// 		let n = parseInt(mResult[i], 10);
+// 		if(n<0 || n > 255) return rgbFormatStr;
+// 		str16 += n < 16 ? '0' + n.toString(16) : n.toString(16);
+// 	}
+// 	return str16;
+// }
+// console.log(rgbTo16('rgb(258, 255, 255)'));
+
+// transform '-' to camel
+// what if it is '-webkit-border-image', 
+// function cssNameToCamel(cssName) {
+// 	let reg = /(-[a-z])/g;
+// 	return cssName.replace(reg, v => v[1].toUpperCase())
+// }
+// console.log(cssNameToCamel('background-color-b-c-d'));
+//timer
+// function timer(start, end) {
+// 	// console.log(start);
+// 	// let s = start;
+// 	// let e = end;
+// 	// if(s = end) return;
+// 	// else {
+// 	// 	s++;
+// 	// 	setTimeout(timer)
+// 	// }
+// 	// setTimeout(() => {
+// 	// 	console.log(s);
+// 	// 	if(s < e)
+// 	// 		setTimeout()
+// 	// }, 100)
+// 	console.log(start ++);
+// 	let s = start;
+// 	let e = end;
+// 	let t = setInterval(() => {
+// 		console.log(s);
+// 		if(this.s == this.e) clearInterval(this.t);
+// 		s ++;
+// 	}, 1000);
+// 	return {
+// 		cancel: () => clearInterval(t)
+// 	};
+// }
+// let b = timer(1,10);
+// setTimeout(() => {
+// 	console.log('cancel!');
+// 	b.cancel();
+// }, 5000)
+// curryIt
+function curryIt(fn) {
+	let args = [];
+	return function _fn(a) {
+		args.push(a);
+		if(args.length < fn.length){
+			return _fn;
 		}
-		return -1;
+		else 
+			return fn(...args);
 	}
 }
-//array sum
-function sum(arr) {
-	// if(arr.length == 0) return 0;
-	// else
-		return arr.reduce((pre,cur) => pre + cur);
+function f1(a, b, c) {
+	Array.from(arguments).forEach(v => console.log(v));
 }
-let testArr = [1,2,3,4,8];
-sum([]);
+// f1(1,2,3);
+let a = curryIt(f1);
+let b = a(1);
+let c = b(2);
+console.log(c(3));
+
 </script>
