@@ -1,0 +1,82 @@
+<script type="text/javascript">
+// normal, inherit supProperty and getProperty
+// shortcommings: instance share property
+// function SuperType() {
+// 	this.supProperty = true;
+// }
+// SuperType.prototype.getProperty = function() {
+// 	return this.supProperty;
+// }
+// function SubType() {
+// 	this.subProperty = false;
+// }
+// SubType.prototype = new SuperType();
+// let instance = new SubType();
+// console.log(instance.getProperty());
+
+// borrow constructor: never use prototype but call Suptype in Subtype
+// function Supertype() {
+// 	this.arr = ['true', 'true', 'true'];
+// }
+// function Subtype() {
+// 	Supertype.call(this);
+// }
+// let instance1 = new Subtype();
+// let instance2 = new Subtype();
+// instance1.arr.push('false');
+// console.log(instance2.arr);
+
+// combine prototype and borrow constructor
+// function Supertype() {
+// 	this.arr = ['true', 'true', 'true'];
+// 	this.name = 'super';
+// }
+// Supertype.prototype.sayName = function() {
+// 	console.log(this.name);
+// }
+// function Subtype() {
+// 	Supertype.call(this);
+// 	this.age = 100;
+// }
+// Subtype.prototype = new Supertype();
+// Subtype.prototype.constructor = Subtype;
+// let instance1 = new Subtype();
+// let instance2 = new Subtype();
+// instance1.arr.push('false');
+// console.log(instance2.arr);
+// instance1.sayName();
+
+// achieve Object.create
+function create(o) {
+	function f() {}
+	f.prototype = o;
+	return new f();
+}
+
+// best way, in combine way, statement 'Subtype.prototype = new Supertype();' just need Supertype.prototype, because SuperType instance property was coverd by Subtype instance property, so change this statement to improve
+function Supertype() {
+	this.arr = ['true', 'true', 'true'];
+	this.name = 'super';
+}
+Supertype.prototype.sayName = function() {
+	console.log(this.name);
+}
+function Subtype() {
+	Supertype.call(this);
+	this.age = 100;
+}
+// Subtype.prototype = new Supertype();
+// Subtype.prototype.constructor = Subtype;
+function inherit(Subtype, Supertype) {
+	// if we add some property to o, Supertype.prototype will not be influenced
+	let o = create(Supertype.prototype);
+	o.constructor = Subtype;
+	Subtype.prototype = o;
+}
+inherit(Subtype, Supertype);
+let instance1 = new Subtype();
+let instance2 = new Subtype();
+instance1.arr.push('false');
+console.log(instance2.arr);
+instance1.sayName();
+</script>
