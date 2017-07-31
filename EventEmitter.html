@@ -1,0 +1,32 @@
+<script type="text/javascript">
+function EventEmitter() {
+	this._event = {};
+	this.subscribe = function(type, callback) {
+		if(!this._event[type]) this._event[type] = [callback];
+		else this._event[type].push(callback);
+	};
+	this.unsubscribe = function(type, callback) {
+		let callbackArr = this._event[type];
+		// callbackArr = undefined or callbackArr = [], !callbackArr will return true
+		if(!callbackArr) return;
+		this._event[type] = this._event[type].filter(v => v != callback);
+	}
+	this.dispatch = function(type, data) {
+		if(this._event[type])
+			this._event[type].forEach(func => func(data));
+	};
+}
+
+let ee = new EventEmitter();
+function f1(data) {
+	console.log(data + ' f1');
+}
+function f2(data) {
+	console.log(data + ' f2');
+}
+ee.subscribe('event1', f1);
+ee.subscribe('event1', f2);
+ee.dispatch('event1', 'heheeh');
+ee.unsubscribe('event1', f1);
+ee.dispatch('event1');
+</script>
