@@ -1,0 +1,40 @@
+<script type="text/javascript">
+	function enhancer(func) {
+	let _func = func;
+	return function(...args) {
+		// do something with args
+		// like f1(...args)
+		_func(...args);
+		// f2(...args)
+	}
+}
+function log1(func) {
+	let _func = func;
+	return function(...args) {
+		console.log('log1(before):' + args.join('|'));
+		_func(...args);
+		console.log('log1(after)');
+	}
+}
+
+function log2(func) {
+	let _func = func;
+	return function(...args) {
+		console.log('log2(before):' + args.join('|'));
+		_func(...args);
+		console.log('log2(after)');
+	}
+}
+
+function test(a, b) {
+	console.log('result:' + (a+b));
+	// return a + b;
+}
+
+// log2((log1(test)))(1,2);
+function enhancer(enhancedFunc, ...middlewares) {
+	return ([test, log1, log2].reduce((pre, curr) =>curr(pre)));
+}
+let enhancedTest = enhancer(test, log1, log2);
+enhancedTest(1,2);
+</script>
