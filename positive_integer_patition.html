@@ -1,0 +1,11 @@
+<script type="text/javascript">
+function q(n, m) {
+	if(n == 0) return 1;
+	if(m == 1) return 1;
+	if(n == 1) return 1;
+	if(n < m) return q(n, n);
+	return q(n, m-1) + q(n-m, m);
+}
+console.log(q(4, 4));
+console.log(q(5, 5));
+</script>
