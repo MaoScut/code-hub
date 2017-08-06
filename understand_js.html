@@ -1,13 +1,29 @@
 <script type="text/javascript">
-let tmp = 'outer';
+/*let tmp = 'outer';
 function test() {
-	// tmp = 'inner';
+	tmp = 'inner';
 	let undefined = 1;
 	var a;
 	console.log(a);
 	console.log(undefined);
-}
-test();
+}*/
+// test();
 // console.log(aaa);
 // var aaa;
+// let foo = 'outer';
+// function bar(func = () => console.log(foo)) {
+// 	let foo = 'inner';
+// 	func();
+// }
+// bar();
+let x = 'oouter';
+// var x = 1;
+function f() {
+	return x;
+}
+function bar(x, y=function(){return x;}) {
+	var x = 1;
+	console.log(y());
+}
+bar();
 </script>
