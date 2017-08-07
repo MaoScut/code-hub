@@ -1,0 +1,72 @@
+<script type="text/javascript">
+// promise
+// let p = new Promise((resolve, reject) => {
+// 	setTimeout(resolve('done'), 2000);
+// });
+// p.then((value) => console.log(value));
+// function loadImageAsync(url) {
+// 	return new Promise((resolve, reject) => {
+// 		let image = new Image();
+// 		image.onload = function() {
+// 			resolve(image);
+// 		};
+// 		image.onerror = function() {
+// 			reject(new Error('could not load image at ' + url))
+// 		};
+// 		image.src = url;
+// 	})
+// }
+// let url = 'https://imgsa.baidu.com/forum/w%3D580/sign=1a047d9d4d10b912bfc1f6f6f3fdfcb5/bb88da33c895d1437a5ede0579f082025aaf079f.jpg';
+// loadImageAsync(url)
+// .then(() => console.log('success'))
+// .catch((e) => console.log(e));
+
+// generator
+// function* gen() {
+// 	let url = 'https://api.github.com/users/github';
+// 	let result = yield fetch(url);
+// 	console.log(result.bio);
+// }
+// let g = gen();
+// let result = g.next();
+// // result.value ok?!!!
+// result.value.then((data) => data.json()).then((jsonData) => g.next(jsonData));
+function chainAnimationsPromise(elem, animations) {
+	let ret = null;
+	let p = Promise.resolve();
+	for(let anim of animations) {
+		p = p.then(val => {
+			ret = val;
+			return anim(elem);
+		})
+	}
+
+	return p.catch( e => {}).then(() => ret)
+}
+
+function chainAnimationsGenerator(elem, animations) {
+	return spawn(function* () {
+		let ret = null;
+		try {
+			for(let anim of animations) {
+				ret = yield anim(elem);
+			}
+		} catch(e) {
+
+		}
+		return ret;
+	})
+}
+
+async function chainAnimationsAsync(elem, animations) {
+	let ret = null;
+	try {
+		for(let anim of animations) {
+			ret = await anim(elem);
+		}
+	} catch(e) {
+
+	}
+	return ret;
+}
+</script>
