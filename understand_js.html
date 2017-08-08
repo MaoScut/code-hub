@@ -10,20 +10,23 @@ function test() {
 // test();
 // console.log(aaa);
 // var aaa;
-// let foo = 'outer';
-// function bar(func = () => console.log(foo)) {
-// 	let foo = 'inner';
-// 	func();
-// }
-// bar();
-let x = 'oouter';
-// var x = 1;
-function f() {
-	return x;
-}
-function bar(x, y=function(){return x;}) {
-	var x = 1;
-	console.log(y());
+let foo = 'outer';
+function bar(foo='paraBlock', func = () => console.log(foo)) {
+	// let foo = 'inner'; error means this foo is at the some block of parameter
+	var foo;
+	func();
+	foo='inner';
+	func();
 }
 bar();
+// let x = 'outer';
+// function f() {
+// 	return x;
+// }
+// function bar(x, y=function(){return x;}) {
+// 	var x = 1;
+// 	console.log(y());
+// }
+// bar();
+
 </script>
