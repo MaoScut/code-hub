@@ -2,11 +2,57 @@
 <html>
 <head>
 	<title></title>
+	<style type="text/css">
+		.ui-slider span{
+			position: relative;
+			display: inline-block;
+			width: 20px;
+			height: 120%;
+			background-color: green;
+			top: 50%;
+			transform: translateY(-50%);
+		}
+		.ui-slider em{
+			position: absolute;
+			right: 0;
+		}
+		.ui-slider .border-div{
+			margin: 0;
+			padding: 0;
+			height: 70%;
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 88%;
+			border: 1px solid black;
+			display: inline-block;
+		}
+		.ui-slider .progress{
+			height: 100%;
+			background-color: blue;
+		}
+		.ui-slider{
+			/*padding: 15% auto;*/
+			position: relative;
+		}
+		.first{
+			width: 500px;
+			border: 1px solid black;
+			height: 30px;
+			/*position: relative;*/
+		}
+				.second{
+			width: 500px;
+		}
+				.third{
+			width: 500px;
+		}
+	</style>
 </head>
 <body>
 	<div class="first" data-bind="type:'slider',data:demo1"></div>
-	<div class="second" data-bind="type:'slider',data:demo2"></div>
-	<div class="third" data-bind="type:'progressbar',data:demo3"></div>
+<!-- 	<div class="second" data-bind="type:'slider',data:demo2"></div>
+	<div class="third" data-bind="type:'progressbar',data:demo3"></div> -->
 </body>
 </html>
 <script type="text/javascript">
@@ -23,33 +69,44 @@
 				progress.style.width = (param.position || 100) + '%';
 				dom.className += ' ui-progressbar';
 				dom.appendChild(progress);
-			}
+			},
 			slider(dom, data) {
-				let bar = document.createElement('span'),
-				    progress = document.createElement('div'),
+				let containerW = dom.clientWidth;
+				let containerH = dom.clientHeight;
+				let borderDiv = document.createElement('div'),// for the progress border
+								bar = document.createElement('span'), // for the draging bar
+				    progress = document.createElement('div'), // for the progress
 				    totleText = null,
 				    progressText = null,
 				    param = data.data,
-				    width = dom.clientWidth,
-				    left = dom.offsetLeft,
-				    realWidth - (param.position || 100) * width  / 100;
+				    // width = dom.clientWidth * 0.9,
+				    left = dom.offsetLeft;
+				    // realWidth = (param.position || 100) * width  / 100;
 				dom.innerHTML = '';
+				dom.className += ' ui-slider';
+				borderDiv.className = 'border-div';
+				borderDiv.appendChild(progress);
+				progress.className = 'progress';
+				dom.appendChild(borderDiv);
+				let width = borderDiv.clientWidth;
+				let realWidth = (param.position || 100) * width  / 100;
+				setStyle(realWidth);
+				dom.appendChild(bar);
 				if(param.totle) {
-					totleText = document.createElement('b');
+					// totleText = document.createElement('b');
 					progressText = document.createElement('em');
-					totleText.innerHTML = param.totle;
-					dom.appendChild(totleText);
+					progressText.style.lineHeight = dom.clientHeight + 'px';
+					// totleText.innerHTML = param.totle;
+					// dom.appendChild(totleText);
+					progressText.innerHTML = param.position + '%';
 					dom.appendChild(progressText);
 				}
-				setStyle(realWidth);
-				dom.className += ' ui-slider';
-				dom.appendChild(progress);
-				dom.appendChild(bar);
+
 				function setStyle(w) {
 					progress.style.width = w + 'px';
 					bar.style.left = w - FONTSIZE / 2 + 'px';
 					if(progressText) {
-						progressText.style.left = w - FONTSIZE /2 * 2.4 + 'px';
+						// progressText.style.left = w - FONTSIZE /2 * 2.4 + 'px';
 						progressText.innerHTML = Number.parseFloat(w / width * 100).toFixed(2) + '%';
 					}
 				}
