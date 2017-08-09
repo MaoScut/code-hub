@@ -22,8 +22,9 @@
 			max-width: 400px;
 		}
 		.inserted{
-			position: relative;
+			position: absolute;
 			top: 50%;
+			left: 50%;
 			text-align: center;
 		}
 		.center2{
@@ -98,16 +99,23 @@ display: inline-block;
 *top: -50%;
 *left: -50%;
 }
+.center6{
+	    margin-top: -50%;
+    margin-left: -50%;
+    height: 200px;
+}
+
 	</style>
 </head>
 <body>
-
+<h2>way1: transform</h2>
 <div class='container'>
 	<div class='someone center1'>
 		<!-- <img src="2.jpg"> -->
 	</div>
 </div>
 
+<h2>way2: minus margin</h2>
 <div class='container'>
 	<!-- <div class='inserted'> -->
 		<div class='someone center2'>
@@ -117,19 +125,31 @@ display: inline-block;
 	<!-- </div> -->
 </div>
 
+<h2>way3: auto margin</h2>
 <div class="m-demo g-BothCtr-1">
 	<div class="cnt"></div>
 </div>
 
+<h2>way4: table display</h2>
 <div class="m-demo g-BothCtr-3">
 	<div class="cnt"></div>
 	<div class="cnt"></div>
 </div>
 
+<h2>way6: double position</h2>
+<div class="container">
+	<div class="inserted">
+		<div class="someone center6">content</div>
+	</div>
+</div>
+
+<h2>way5: float or not parent, table display</h2>
 <div class="m-demo g-BothCtr-4">
 	<div class="tableCell">
 		<div class="cnt">content</div>
 	</div>
 </div>
+
+
 </body>
 </html>
