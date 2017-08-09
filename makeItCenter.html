@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>make center</title>
+	<style type="text/css">
+		.container{
+			width: 500px;
+			height: 500px;
+			border: 1px solid #333
+		}
+		.someone{
+			width: 200px;
+			height: 100px;
+			background-color: green;
+		}
+		.center1{
+			position: relative;
+			top: 50%;
+			left: 50%;
+			transform: translateY(-50%) translateX(-50%);
+		}
+		.center2{
+			position: relative;
+			top: 50%;
+			left: 50%;
+			transform: translateY(-50%) translateX(-50%);
+		}
+		.inserted{
+			position: relative;
+			top: 50%;
+			text-align: center;
+		}
+		.center2{
+			position: relative;
+			top: -50%;
+		}
+
+		.m-demo {
+width: 500px;
+height: 500px;
+border: 1px solid #000000;
+}
+
+.m-demo div {
+width: 200px;
+height: 200px;
+border: 1px solid #FF0000;
+}
+
+.g-BothCtr-1 {
+position: relative;
+}
+
+.g-BothCtr-1 .cnt {
+margin: auto;
+position: absolute;
+left: 0;
+right: 0;
+top: 0;
+bottom: 0;
+}
+
+.g-BothCtr-3 {
+/*对包含元素浮动的情况不适用，IE6、7不兼容*/
+display: table-cell;
+text-align: center;
+vertical-align: middle;
+}
+
+.g-BothCtr-3 .cnt {
+vertical-align: middle;
+display: inline-block;
+}
+
+.g-BothCtr-4 {
+display: table;
+position: relative;
+float: left; /*可不浮动，也可浮动*/
+}
+
+.g-BothCtr-4 .tableCell {
+display: table-cell;
+vertical-align: middle;
+text-align: center;
+*position: absolute;
+*top: 50%;
+*left: 50%;
+}
+
+.g-BothCtr-4 .cnt {
+
+vertical-align: center;
+
+display: inline-block;
+
+*position: relative;
+*top: -50%;
+*left: -50%;
+}
+	</style>
+</head>
+<body>
+
+<div class='container'>
+	<div class='someone center1'></div>
+</div>
+
+<div class='container'>
+	<div class='inserted'>
+		<div class='someone center2'></div>
+	</div>
+</div>
+
+<div class="m-demo g-BothCtr-1">
+	<div class="cnt"></div>
+</div>
+
+<div class="m-demo g-BothCtr-3">
+	<div class="cnt"></div>
+	<div class="cnt"></div>
+</div>
+
+<div class="m-demo g-BothCtr-4">
+	<div class="tableCell">
+		<div class="cnt">content</div>
+	</div>
+</div>
+</body>
+</html>
