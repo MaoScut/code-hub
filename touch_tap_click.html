@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+	<style type="text/css">
+		#out{
+			width: 500px;
+			height: 500px;
+			background-color: green;
+		}
+		#middle{
+			width: 400px;
+			height: 400px;
+			background-color: blue;
+		}
+		#inner{
+			width: 300px;
+			height: 300px;
+			background-color: gold;
+		}
+	</style>
+</head>
+<body>
+<div id='out'>
+	<div id='middle'>
+		<div id='inner'></div>
+	</div>
+</div>
+</body>
+</html>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script type="text/javascript">
+// $('out').addEventListener('click', () => console.log('out is clicked: capture'), true);
+// $('#out').addEventListener('click', () => console.log('out is clicked: bobble'), false);
+
+// $('#middle').addEventListener('click', () => console.log('middle is clicked'));
+// $('#inner').addEventListener('click', () => console.log('inner is clicked'));
+// $('#inner').addEventListener('tap', () => console.log('inner is tapped'));
+// $('#inner').on('tap', ()=>console.log('inner is tapped')).on('click', ()=>console.log('inner is clicked'));
+$('#middle').on('click', ()=>console.log('middle is clicked')).on('tap', ()=>console.log('middle is tapped'));
+
+$('#inner').on('tap', function(e) {
+	console.log('inner is tap');
+	e.stopPropagation();
+	// if stop propogation, will click event be emitted?
+})
+$('#inner').on('click', function() {
+	console.log('inner is click');
+	// console.log($(this));
+	$(this).hide()
+});
+// $('#middle').on('click', function() {console.log('middle is clicked')});
+</script>
