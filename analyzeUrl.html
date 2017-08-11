@@ -1,0 +1,64 @@
+<script type="text/javascript">
+// 	function getUrlParam(sUrl, sKey) {
+//     let para = sUrl.match(/\?([^#]+)/)[1];
+//     /*let pattern = '/' + sKey + '=([^&])+/';
+//     let reg = new RegExp(pattern, g);
+//     console.log(para.match(reg));
+//     return para.match(reg)[1];*/
+//     //let para = sUrl.split('?');
+//     let r = para.split('&');
+//     let result = [];
+//     // r.forEach((v) => {
+//     //     if(v.startsWith(sKey))
+//     //         result.push(v.split('=')[1]);
+//     // })
+//     r.forEach(function(v) {
+//     	if(v.slice(0, sKey.length) == sKey)
+//     		result.push(v.slice(sKey.length + 1));
+//     })
+//     if(result.length == 0) return '';
+//     if(result.length == 1) return result[0];
+//     return result;
+// }
+// 	function getUrlParam(sUrl, sKey) {
+//     let para = sUrl.match(/\?([^#]+)/)[1];
+//     /*let pattern = '/' + sKey + '=([^&])+/';
+//     let reg = new RegExp(pattern, g);
+//     console.log(para.match(reg));
+//     return para.match(reg)[1];*/
+//     //let para = sUrl.split('?');
+//     let r = para.split('&');
+//     let result = {};
+//     r.forEach(function(v) {
+//         let [key, value] = v.split('=');
+//     	if(result[key]===undefined) result[key] = value;
+//         else {
+//         	// result[key] = [...result[key], value];
+        	
+//         }
+//     })
+//     if(sKey !==undefined) {
+//         if(result[sKey] === undefined) return '';
+//         if(result[sKey].length === 1) return result[sKey][0];
+//         return result[sKey];
+//     }
+//     return result;
+// }
+// let url = 'http://www.nowcoder.com?key=1&key=2&key=3&test=4#hehe';
+// console.log(getUrlParam(url, 'key'));
+Array.prototype.uniq = function () {
+    var temp = [];
+    var hasNaN = false;
+    this.forEach(function(v){
+        if(typeof v === 'number' && isNaN(v)){
+            if(!hasNaN) {temp.push(NaN); hasNaN = true;}
+        } else {
+            if(temp.indexOf(v) === -1)
+                temp.push(v);
+        }
+    })
+    return temp;
+}
+console.log(
+[false, true, undefined, null, NaN, 0, 1, {}, {}, 'a', 'a', NaN].uniq());
+</script>
