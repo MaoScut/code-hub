@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Various DOM Tests</title>
+
+<script>
+var visible = window.locationbar.visible;
+</script>
+
+</head>
+<body>
+  <p>Various DOM Tests</p>
+</body>
+</html>
+<script type="text/javascript">
+function f1(str) {
+	var result = 0;
+	for(var end =0; end<str.length; end++){
+		var s=end;
+		while(str[s]!=str[s-1] && s -1 >=0){
+			s--;
+		}
+		var temp = end -s + 1;
+		if(temp>result) result = temp;
+	}
+	return result;
+}
+var str1 = '111101011101';
+// console.log(f1(str1));
+function f3(x,f,d,p) {
+	var rent = x;
+	var haveApple = f;
+	var haveMoney = d;
+	var applePrice = p;
+	var totalMoney = haveApple*applePrice + haveMoney;
+	var days = 0;
+	// while(totalMoney > 0){
+	// 	totalMoney = totalMoney - rent - applePrice;
+	// 	days ++;
+	// }
+	// days --;
+	// return days;
+	let rentDay = Math.floor(haveMoney/rent);
+	if(rentDay <= haveApple) return rentDay;
+	else {
+		return haveApple + Math.floor((haveMoney-haveApple*rent)/(applePrice+rent));
+	}
+	// return Math.floor(totalMoney/(rent+applePrice));
+}
+console.log(f3(3,5,100,10));
+</script>
