@@ -29,8 +29,13 @@
 		/*padding + margin*/
 		.pm-container{
 			padding-left: 300px;
-			height: 500px;
+			/*height: 500px;*/
 			box-sizing: border-box;
+		}
+		.pm-container::after{
+			content: '';
+			clear: both;
+			display: block;
 		}
 		.pm-left{
 			float: left;
