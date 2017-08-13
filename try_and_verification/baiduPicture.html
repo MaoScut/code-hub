@@ -17,7 +17,7 @@
 	</style>
 </head>
 <body>
-	<ul id="picUl"></ul>
+	<ul id="picUl" onresize="alert('You have changed the size of the window')"></ul>
 </body>
 </html>
 <script type="text/javascript">
@@ -38,7 +38,8 @@
 	}
 	function layoutPic() {
 		let picUl = document.getElementById('picUl');
-		let ulWidth = 1335;
+		picUl.addEventListener('resize', ()=>console.log('hhhh'));
+		let ulWidth = picUl.clientWidth-16;
 		let handledNum = 0;
 		let maxHeight = 200;
 		while(handledNum < pictureNum) {
@@ -70,5 +71,9 @@
 	window.onload = function() {
 		// addImgNode();
 		layoutPic();
+		window.onresize = function() {
+			document.getElementById('picUl').innerHTML = '';
+			layoutPic();
+		}
 	}
 </script>
