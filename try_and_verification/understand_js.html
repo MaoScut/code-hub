@@ -14,11 +14,11 @@ let foo = 'outer';
 function bar(foo='paraBlock', func = () => console.log(foo)) {
 	// let foo = 'inner'; error means this foo is at the some block of parameter
 	var foo;
-	func();
+	func(); // paraBlock
 	foo='inner';
-	func();
+	func(); // 
 }
-bar();
+// bar();
 // let x = 'outer';
 // function f() {
 // 	return x;
@@ -28,5 +28,30 @@ bar();
 // 	console.log(y());
 // }
 // bar();
-
+// console.log(text);
+// var text = 'hhh';
+// function text() {};
+// console.log(text);
+// let arr = [];
+// for(var i =0; i<10; i++) {
+// 	arr[i] = function(){
+// 		console.log(i);
+// 	}
+// }
+// arr[8] === arr[7];
+let arr = [];
+// for(let i =0; i<10; i++) {
+// 	arr[i] = function(){
+// 		console.log(i);
+// 	}
+// }
+for(var i = 0; i<10; i++) {
+	arr[i] = (function(num){
+		var i = num;
+		return function(){
+		console.log(num)
+		}
+	})(i)
+}
+arr[8]();
 </script>
