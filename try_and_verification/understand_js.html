@@ -40,11 +40,11 @@ function bar(foo='paraBlock', func = () => console.log(foo)) {
 // }
 // arr[8] === arr[7];
 let arr = [];
-// for(let i =0; i<10; i++) {
-// 	arr[i] = function(){
-// 		console.log(i);
-// 	}
-// }
+for(let i =0; i<10; i++) {
+	arr[i] = function(){
+		console.log(i);
+	}
+}
 for(var i = 0; i<10; i++) {
 	arr[i] = (function(num){
 		var i = num;
