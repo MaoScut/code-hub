@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<!-- <img src="http://g.hiphotos.baidu.com/zhidao/pic/item/b7fd5266d0160924e59c1d2dd20735fae6cd344e.jpg" alt=""> -->
+<<iframe src="https://www.baidu.com" frameborder="2"></iframe>
+</body>
+</html>
+<script>
+  // 1.对cors的实现
+  // xdr已经废弃，ie8也支持xhr的跨域
+  // const xhr = new XMLHttpRequest();
+  // const url = 'http://g.hiphotos.baidu.com/zhidao/pic/item/b7fd5266d0160924e59c1d2dd20735fae6cd344e.jpg';
+  // xhr.open('GET', url);
+  // xhr.onreadystatechange = function () {
+  //   if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+  //     console.log(xhr.responseText);
+  //   }
+  // };
+  // xhr.send();
+
+  // 2.jsonp：动态添加script并且指定回调函数，jquery的getJSON就是这个方法
+  // 服务器那边要取得这个回调函数
+  const script = document.createElement('script');
+  script.src = 'http://example.com/data.php?callback=dosomething';
+  function dosomething(data) {
+    console.log(data);
+  }
+  document.appendChild(script);
+
+  // 3.new Image(),不多说，没什么用，贡献个访问量而已
+
+  // 4.document.domian
+  // 页面之中不同源框架之间通信
+  // 可以取得window对象，但是属性不可用，改了domain就可以了
+  // 然而这是有限制的，只能‘往上改’，不能拓展
+  // a.b.example.com 中某个文档的document.domain 
+  // 可以设成a.b.example.com、b.example.com 、example.com中的任意一个，
+  // 但是不可以设成 c.a.b.example.com,因为这是当前域的子域，也不可以设成baidu.com,因为主域已经不相同了。
+  document.domain = 'example.com'; // 设置父框架的domain
+  // 子框架的页面代码也要有
+  // document.domain = 'example.com';
+  // 之后作为iframe嵌入到父页面中
+  // 然后父框架可以用getElement的方法去访问子框架了
+
+  // 5.window.name
+  // 每个iframe有可以对该属性进行读写，可以通过它来通信
+  // 假设a页面想获取b页面的数据
+  // 先在b页面中，设置window.name=数据
+  // 在a中，设置一个iframe，src设置为b的地址，本来很简单，直接去获取iframe的contentWindow.name就行了
+  // 然而，a与b不同源的话，是无法访问属性的
+  // 怎么办呢？过河拆桥法，iframe加载完后，此时这个iframe的contentWindow.name中的数据就是我们想要的了
+  // 先再次指定onload的处理函数，然后把iframe的src改为与a同源的页面，window.name只要不去改它，即使是页面跳转也不变
+  // 触发load事件的处理函数，就可以获取到数据了
+
+  // 6.postMessage
+  // 在有数据的页面向想要获取数据的页面发送消息，postMessage(data, origin)
+  // 想要数据的页面设置onmessage函数，就可以获得发送过来的数据了
+</script>
