@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <h1><h2><h3>1</h3></h2></h1>
+  <div>
+    <a href="">1</a>
+    <table>1</table>
+  </div>
+  <iframe src="" frameborder="0">1</iframe>
+</body>
+</html>
+<script>
+  function filterNodes(func) {
+    function travelDomNode(node) {
+      // 深度优先遍历
+      // 思路：先考虑返回的结果，返回该符合条件的该节点以及其子节点
+      // 假设现在到第k层了，因为和前面的没关系，所以先创建空数组
+      // 然后判断自己是否满足，接下来，对其每个子节点，依次将每个子树的结果连接起来
+      // 最后返回结果
+      let res = [];
+      if (func(node)) {
+        res.push(node);
+      }
+      node.childNodes.forEach((n) => {
+        res = res.concat(travelDomNode(n));
+      });
+      return res;
+    }
+    return travelDomNode(document.body);
+  }
+  console.log(filterNodes(node => node.nodeType === 1).length);
+</script>
