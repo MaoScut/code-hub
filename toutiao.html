@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+</body>
+</html>
+<script type="text/javascript">
+	// function maxX(arr) {
+	// 	var result = [];
+	// 	var unsatiIndex = [];
+	// 	var xArr = arr.slice().sort(function(v1, v2){
+	// 		return v1[0] -v2[0];
+	// 	});
+	// 	var yArr = arr.slice().sort(function(v1, v2){
+	// 		return v1[0] -v2[0];
+	// 	});
+	// 	var middleElement = yArr[Math.floor(yArr.length/2)];
+	// 	var _xArr = [];
+	// 	xArr.forEach(function(v) {
+	// 		if(middleElement[0] - v[0] > 0) {
+	// 			if (middleElement[1] - v[1] <= 0) {
+	// 				_xArr.push(v);
+	// 			}
+	// 		} else {
+	// 			_xArr.push(v);
+	// 		}
+	// 	})
+	// 	for(var i = 0; i < _xArr.length; i ++) {
+	// 		var flag = true;
+	// 		for(var j = i; j < _xArr.length; j ++) {
+	// 			if(_xArr[j][1] - _xArr[i][1] > 0) {
+	// 				flag = false;
+	// 				break;
+	// 			}
+	// 		}
+	// 		if(flag) {
+	// 			result.push(_xArr[i]);
+	// 		}
+	// 	}
+	// 	console.log(result);
+	// 	return result;
+	// }
+	// let arr = [[1,2], [5,3], [4, 6], [7,5], [9,0]];
+	// maxX(arr);
+	function showMoney( ) {
+    console.log( this.money);
+};
+var personA = new Object;
+var personB = new Object;
+personA.money= "100";
+personB.money= "150";
+personA.showMoney= showMoney;
+personB.showMoney= showMoney;
+personA.showMoney();
+</script>
