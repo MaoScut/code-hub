@@ -1,0 +1,52 @@
+<script>
+  function RandomStr() {
+    // 用一个map来保存已经产生的随机数字
+    // 之后产生随机数时，先检查是否在map中，若存在，则重新生成
+    // 可能的字符一共是26+26+10 = 62
+    // 那么可以产生62的6次方，数字还是比较大的，while的循环次数不会很多
+    const head = 'abcdefghijklmnopqrstuvwxyz';
+    const num = '0123456789';
+    const haveBeenProuduced = new Map();
+    const allStr = head + head.toUpperCase() + num;
+    const len = allStr.length;
+    function produce() {
+      let res = '';
+      while (res.length < 6) {
+        res += allStr[Math.floor(Math.random() * len)];
+      }
+      return res;
+    }
+    return function () {
+      let r = produce();
+      while (haveBeenProuduced.has(r)) {
+        r = produce();
+      }
+      haveBeenProuduced.set(r, true);
+      return r;
+    };
+  }
+  const randomStr = RandomStr();
+  let time = 0;
+  while (time < 50) {
+    time += 1;
+    console.log(randomStr());
+  }
+  function pop(option) {
+    const dom = document.createElement('div');
+    const title = document.createElement('h1');
+    const btn = document.createElement('button');
+    // 设置一些文字。。。。
+    this.dom = dom;
+    btn.onclick = (function () {
+      this.container.removeChild(this.dom);
+      // 强制垃圾回收
+      // 其实可以用单里
+    }).bind(this);
+    dom.appendChild(title);
+    dom.appendChild(btn);
+    this.append = function (container) {
+      container.append(this.dom);
+      this.parent = container;
+    };
+  }
+</script>
