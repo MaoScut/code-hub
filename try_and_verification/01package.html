@@ -1,0 +1,166 @@
+<script>
+  function main(bagV, items) {
+    const itemsNum = items.length;
+    let itemIsPut = new Array(itemsNum + 1).fill(false);
+    const optp = new Array(itemsNum + 1);
+    for (let i = 0; i <= itemsNum; i += 1) {
+      const tempArr = [];
+      for (let j = 0; j <= bagV; j += 1) {
+        tempArr[j] = 0;
+      }
+      optp[i] = tempArr;
+    }
+    for (let i = 1; i <= itemsNum; i += 1) {
+      for (let j = 1; j <= bagV; j += 1) {
+        optp[i][j] = optp[i - 1][j];
+        if (j >= items[i - 1].w && optp[i - 1][j - items[i - 1].w] + items[i - 1].p > optp[i - 1][j]) {
+          optp[i][j] = optp[i - 1][j - items[i - 1].w] + items[i - 1].p;
+        }
+      }
+    }
+    let weight = bagV;
+    for (let i = itemsNum; i >= 1; i -= 1) {
+      if (optp[i][weight] > optp[i - 1][weight]) {
+        itemIsPut[i] = true;
+        weight -= items[i - 1].w;
+      }
+    }
+    console.log(optp[itemsNum][bagV]);
+    itemIsPut = itemIsPut.slice(1);
+    itemIsPut.forEach(function(v, index) {
+    	if(v) console.log(items[index].w);
+    });
+  }
+const str = `1 93
+2 61
+2 64
+1 56
+1 76
+2 84
+1 64
+1 59
+1 67
+2 48
+1 97
+2 54
+2 98
+2 58
+2 33
+2 98
+1 96
+2 89
+1 73
+1 60
+2 71
+2 43
+1 55
+2 72
+1 76
+2 92
+2 80
+1 85
+1 90
+1 46
+1 43
+2 60
+2 68
+1 82
+2 64
+1 21
+1 94
+1 49
+2 20
+2 41
+1 92
+1 59
+2 49
+2 60
+1 24
+1 48
+2 17
+2 87
+2 93
+1 79
+2 65
+2 71
+1 95
+1 100
+2 86
+1 65
+1 93
+2 69
+2 87
+1 84
+1 89
+2 67
+2 84
+2 52
+2 87
+1 44
+2 80
+2 82
+1 89
+2 68
+1 64
+2 97
+2 98
+1 21
+2 51
+1 54
+1 88
+2 86
+2 93
+2 39
+2 90
+2 88
+1 66
+1 91`.split(/\n/).map(v => ({
+      w: Number(v.split(' ')[0]),
+      p: Number(v.split(' ')[1]),
+    }));
+//   1 14
+// 2 15
+// 2 11
+// 2 12
+// 2 9
+// 1 14
+// 2 15
+// 1 9
+// 2 11
+// 2 6
+  const items = [{
+    w: 1,
+    p: 14,
+  }, {
+    w: 2,
+    p: 15,
+  }, {
+    w: 2,
+    p: 11,
+  }, {
+    w: 2,
+    p: 12,
+  }, {
+    w: 2,
+    p: 9,
+  }, {
+    w: 1,
+    p: 14,
+  }, {
+    w: 2,
+    p: 15,
+  }, {
+    w: 1,
+    p: 9,
+  }, {
+    w: 2,
+    p: 11,
+  }, {
+    w: 2,
+    p: 6,
+  }];
+  setTimeout(function(){
+    console.log(main(71, str));
+  }, 5000);
+  // console.log(str);
+</script>
