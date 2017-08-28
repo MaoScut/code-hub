@@ -34,18 +34,38 @@ const t1 = 'rgb(125,25,25)';
 // console.log(reg.test('257') === false);
 // const captureNumReg1 = /rgb\(((\d{1,2}|(1\d{2})|(2[0-4]\d)|(25[0-5])),\s*){2}(\d{1,2}|(1\d{2})|(2[0-4]\d)|(25[0-5]))\)/;
 
-console.log(main('rgb(255,255,255)'));
-console.log(main('rgb(255,255,     255)'));
-console.log(main('rgb(0, 0, 0)'));
-console.log(main('rgb(0,1, 3)'));
-console.log(main('rgb(25, 25, 25)'));
-console.log(main('rgb(5, 55,           255)'));
+// console.log(main('rgb(255,255,255)'));
+// console.log(main('rgb(255,255,     255)'));
+// console.log(main('rgb(0, 0, 0)'));
+// console.log(main('rgb(0,1, 3)'));
+// console.log(main('rgb(25, 25, 25)'));
+// console.log(main('rgb(5, 55,           255)'));
+// console.log('error');
+// console.log(main('rgb(-1, 255, 255)'));
+// console.log(main('rgb(0, 258, 255)'));
+// console.log(main('rgb(255, 275, 255)'));
+// console.log(main('rgb(, 255, 255)'));
+// console.log(main('rgb(255, 255)'));
+// console.log(main('rgb(255, 255, 255,)'));
+
+function checkFormat(rgb) {
+  // 允许前缀0
+  // const pattern = /rgb\((0*((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5])),\s*){2}0*((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))\)/;
+  // 不允许前缀0
+  const pattern = /rgb\((((\d)|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5])),\s*){2}((\d)|([1-9]\d)|(1\d{2})|(2[0-4]\d)|(25[0-5]))\)/;
+  return pattern.test(rgb);
+}
+// 先写好测试真的很必要
+console.log(checkFormat('rgb(255,255,255)'));
+console.log(checkFormat('rgb(255,255,     255)'));
+console.log(checkFormat('rgb(025, 0,0)'));
+console.log(checkFormat('rgb(0,1, 3)'));
+console.log(checkFormat('rgb(25, 25, 25)'));
+console.log(checkFormat('rgb(5, 55,           255)'));
 console.log('error');
-console.log(main('rgb(-1, 255, 255)'));
-console.log(main('rgb(0, 258, 255)'));
-console.log(main('rgb(255, 275, 255)'));
-console.log(main('rgb(, 255, 255)'));
-console.log(main('rgb(255, 255)'));
-console.log(main('rgb(255, 255, 255,)'));
-
-
+console.log(checkFormat('rgb(-1, 255, 255)'));
+console.log(checkFormat('rgb(0, 258, 255)'));
+console.log(checkFormat('rgb(255, 275, 255)'));
+console.log(checkFormat('rgb(, 255, 255)'));
+console.log(checkFormat('rgb(255, 255)'));
+console.log(checkFormat('rgb(255, 255, 255,)'));
