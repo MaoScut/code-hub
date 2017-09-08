@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    body,
+    html {
+      padding: 0;
+      margin: 0;
+      font-size: 14px;
+      color: #000000;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      table-layout: fixed;
+    }
+
+    thead {
+      background: #3d444c;
+      color: #ffffff;
+    }
+
+    td,
+    th {
+      border: 1px solid #e1e1e1;
+      padding: 0;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <table id="jsTrolley">
+    <thead>
+      <tr>
+        <th>名称</th>
+        <th>价格</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>产品1</td>
+        <td>10.00</td>
+        <td><a href="javascript:void(0);">删除</a></td>
+      </tr>
+      <tr>
+        <td>产品2</td>
+        <td>30.20</td>
+        <td><a href="javascript:void(0);">删除</a></td>
+      </tr>
+      <tr>
+        <td>产品3</td>
+        <td>20.50</td>
+        <td><a href="javascript:void(0);">删除</a></td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th>总计</th>
+        <td colspan="2">60.70(3件商品)</td>
+      </tr>
+    </tfoot>
+  </table>
+</body>
+<button id="btn">增加一组</button>
+</html>
+<script>
+  function add(items) {
+    let table = $('jsTrolley');
+    let tableBody = table.children[1];
+    let onum = tableBody.childElementCount;
+    let staticNode = $('jsTrolley').tFoot.children[0].children[1];
+    let str = staticNode.innerHTML;
+    let omoney = Number(str.slice(0, str.indexOf('(')));
+    for (let i = 0; i < items.length; i++) {
+      tableBody.appendChild(cell(items[i]));
+      onum++;
+      omoney += items[i].price;
+    }
+    omoney = omoney.toFixed(2);
+    staticNode.innerHTML = omoney + '(' + onum + ')件商品';
+  }
+
+  function bind() {
+    let table = $('jsTrolley');
+    let tableBody = table.children[1];
+    tableBody.onclick = function (e) {
+      if (e.target.innerHTML == '删除') {
+        let parent = e.target.parentNode.parentNode;
+        let price = Number(parent.children[1].innerHTML);
+
+        let staticNode = $('jsTrolley').tFoot.children[0].children[1];
+        let str = staticNode.innerHTML;
+        let omoney = Number(str.slice(0, str.indexOf('(')));
+        let onum = tableBody.childElementCount;
+        omoney -= price;
+        onum--;
+        staticNode.innerHTML = omoney.toFixed(2) + '(' + onum + ')件商品';
+        let tbody = parent.parentNode;
+        tbody.removeChild(parent);
+      }
+    }
+
+  }
+  function cell(item) {
+    let tr = document.createElement('tr');
+    let tdn = document.createElement('td');
+    let tdp = document.createElement('td');
+    let tdd = document.createElement('td');
+    tdn.innerHTML = item.name;
+    tdp.innerHTML = item.price;
+    tdd.innerHTML = '<a href="javascript:void(0);">删除</a>';
+    tr.appendChild(tdn);
+    tr.appendChild(tdp);
+    tr.appendChild(tdd);
+    return tr;
+  }
+  function $(id) {
+    return document.getElementById(id);
+  }
+  bind();
+  $('btn').onclick = function() {
+    add([{
+      name: '444',
+      price: 1,
+    }, {
+      name: '555',
+      price: 2,
+    }]);
+  };
+</script>
