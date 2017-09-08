@@ -1,20 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-</head>
-<body>
-  请输入T的值：<input id="Tvalue" type="text">
-  <button id="start">开始计算</button>
-  <br />
-  <p>结果</p>
-  <textarea name="" id="output" cols="70" rows="15"></textarea>
-</body>
-</html>
-<script>
 // 适应值函数
 // T是一个常数
 // C和P都是10维向量
@@ -25,7 +8,7 @@ function initAdapter(T, C, P) {
       V[i] = 10 + T * x[i] * (0.0012 + P[i] * 0.0001) / C[i];
     }
     const sumV = V.reduce((pre, cur) => pre + cur);
-    const TCP = x.map((v, index) => (T * v * P[index] / C[index]));
+    const TCP = x.map((v, index) =>(T * v * P[index] / C[index]));
     const sumTCP = TCP.reduce((pre, cur) => pre + cur);
     return sumTCP / (T + sumV);
   };
@@ -200,40 +183,4 @@ const myCoder = {
   encoder,
   decoder,
 };
-function $(id) {
-  return document.getElementById(id);
-}
 console.log(GA(produceLimitedVector, initAdapter(1, 1, 1), myCoder));
-document.getElementById('start').onclick = function () {
-  const tvalue = Number($('Tvalue').value);
-  if (Number.isNaN(tvalue) || $('Tvalue').value === '') {
-    alert('请输入数字！');
-    return;
-  }
-  $('output').value = '计算中';
-  setTimeout(() => {
-    const C = `3.685807597
-0.483552485
-0.632108877
-0.710118939
-0.4196231
-0.786223525
-0.929991926
-0.583634477
-0.871559461
-0.388306654`.split('\n').map(v => Number(v));
-    const P = `0.642831
-0.511645
-0.537118
-0.840793
-0.602802
-0.44032
-0.566958
-0.631186
-0.748908
-0.288755`.split('\n').map(v => Number(v));
-    $('output').value = GA(produceLimitedVector, initAdapter(tvalue, C, P), myCoder).join('\r\n');
-  }, 0);
-};
-
-</script>
