@@ -9,7 +9,7 @@ function lcs(x, y) {
   for (let j = -1; j < leny; j += 1) {
     cache[-1][j] = '';
   }
-  let result = '';
+  // let result = '';
   // 注意左上角的要先知道
   for (let i = 0; i < lenx; i += 1) {
     for (let j = 0; j < leny; j += 1) {
@@ -19,12 +19,13 @@ function lcs(x, y) {
         cache[i][j] = cache[i - 1][j].length > cache[i][j - 1].length ?
           cache[i - 1][j] : cache[i][j - 1];
       }
-      if (cache[i][j].length > result.length) {
-        result = cache[i][j];
-      }
+      // if (cache[i][j].length > result.length) {
+      //   result = cache[i][j];
+      // }
     }
   }
-  return result;
+  // 最后一个就是最优的啊！
+  return cache[lenx - 1][leny - 1];
 }
 const str11 = 'abcdefg';
 const str12 = 'abc';
