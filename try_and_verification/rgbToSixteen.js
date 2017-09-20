@@ -56,16 +56,24 @@ function checkFormat(rgb) {
   return pattern.test(rgb);
 }
 // 先写好测试真的很必要
-console.log(checkFormat('rgb(255,255,255)'));
-console.log(checkFormat('rgb(255,255,     255)'));
-console.log(checkFormat('rgb(025, 0,0)'));
-console.log(checkFormat('rgb(0,1, 3)'));
-console.log(checkFormat('rgb(25, 25, 25)'));
-console.log(checkFormat('rgb(5, 55,           255)'));
-console.log('error');
-console.log(checkFormat('rgb(-1, 255, 255)'));
-console.log(checkFormat('rgb(0, 258, 255)'));
-console.log(checkFormat('rgb(255, 275, 255)'));
-console.log(checkFormat('rgb(, 255, 255)'));
-console.log(checkFormat('rgb(255, 255)'));
-console.log(checkFormat('rgb(255, 255, 255,)'));
+// console.log(checkFormat('rgb(255,255,255)'));
+// console.log(checkFormat('rgb(255,255,     255)'));
+// console.log(checkFormat('rgb(025, 0,0)'));
+// console.log(checkFormat('rgb(0,1, 3)'));
+// console.log(checkFormat('rgb(25, 25, 25)'));
+// console.log(checkFormat('rgb(5, 55,           255)'));
+// console.log('error');
+// console.log(checkFormat('rgb(-1, 255, 255)'));
+// console.log(checkFormat('rgb(0, 258, 255)'));
+// console.log(checkFormat('rgb(255, 275, 255)'));
+// console.log(checkFormat('rgb(, 255, 255)'));
+// console.log(checkFormat('rgb(255, 255)'));
+// console.log(checkFormat('rgb(255, 255, 255,)'));
+
+// (\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5])
+// ((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))
+const p = /^rgb\((((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5])),\s*){2}((\d{1,2})|(1\d{2})|(2[0-4]\d)|(25[0-5]))\)/;
+console.log(p.test('rgb(255,255,257)'));
+const nump = /^rgb\((\d+,\s*){2}(\d+)\)/;
+const arr = 'rgb(255,255,255)'.match(nump);
+console.log(arr);
