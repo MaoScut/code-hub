@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .container{
+      height: 700px;
+      /* padding: 0 200px; */
+    }
+    .middle{
+      /* background-color: seagreen; */
+      float: left;
+      width: 100%;
+      height: 100%;
+      padding: 0 200px;
+      /* 注意设置box-sizing！ */
+      box-sizing: border-box;
+    }
+    .mm{
+      width: 100%;
+      height: 100%;
+      background-color: seagreen;
+    }
+    .left{
+      background-color: silver;
+      margin-left: -100%;
+      height: 100%;
+      width: 200px;
+      float: left;
+      /* position: relative;
+      left: -200px; */
+    }
+    .right{
+      background-color: sienna;
+      margin-left: -200px;
+      height: 100%;
+      width: 200px;
+      float: left;
+      /* position: relative;
+      right: -200px; */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="middle">
+      <div class="mm"></div>
+    </div>
+    <div class="left"></div>
+    <div class="right"></div>
+  </div>
+</body>
+</html>
