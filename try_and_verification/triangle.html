@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    /* 
+     * border大小不同的时候，分界线的角度就不是45度了
+     * 比较大的border会往比较小的border那边压，所以这个角度是可以随意的
+     * 所以两个底角是可以随意设置的
+     * 试一下一个30度，一个60度
+     */
+    .div1{
+      width: 400px;
+      height: 173px;
+      border-left: white 300px solid;
+      border-top: blue 173px solid;
+      border-right: white 100px solid;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <div class="div1"></div>
+</body>
+</html>
