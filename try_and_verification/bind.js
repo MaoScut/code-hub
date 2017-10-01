@@ -47,10 +47,27 @@ if (!Function.prototype.bind) {
     return afterBind;
   };
 }
-function sayName() {
-  console.log(this.name);
+Function.prototype.myBind = function (context) {
+  const originalFunc = this;
+  const args = [].slice.call(arguments, 1);
+  function F() {}
+  F.prototype = originalFunc.prototype;
+  const afterBind = function () {
+    return originalFunc.call(
+      this instanceof F ? this : context || window,
+      args.concat([].slice.call(arguments)),
+    );
+  };
+  afterBind.prototype = new F();
+  return afterBind;
+};
+function sayName(name) {
+  // console.log(this.name);
+  this.name = name;
 }
+sayName.prototype.age = 100;
 const obj = {
   name: 'hh',
 };
-sayName.myBind(obj)();
+const nf = sayName.bind(null, 'mao');
+console.log(new nf() instanceof sayName);
