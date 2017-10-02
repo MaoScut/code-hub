@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>浮动去空格</title>
+  <style>
+    button {
+      margin: 0;
+    }
+
+    p {
+      clear: both;
+    }
+  </style>
+</head>
+<!-- 为什么把换行符换成nbsp，p就和btn有间距了呢？ -->
+<!-- 原来的换行符，由于btn浮动，所以全都跑到这一行的末尾，而换行符在末尾没有作用，无法撑开linebox -->
+<!-- 所以导致第一行都塌了，p又是clearboth，并且margin小于第一行btn的高度，所以内容和第一行紧贴 -->
+<!-- 换成nbsp的话，第一行的最后面是有字的，只不过是空格，没显示，linebox有高度 -->
+<!-- p的上margin顶住第一行底部，所以第二行和第一行有间距 -->
+<body>
+  <button>按钮1</button>
+  <button>按钮2</button>
+  <button>按钮3</button>
+  <button>按钮4</button>
+  <p><input type="button" id="trigger" value="点击按钮浮动"></p>
+  <script>
+    var trigger = document.getElementById("trigger"),
+      buttons = document.getElementsByTagName("button");
+
+    var length = buttons.length;
+
+    if (trigger && length > 0) {
+      trigger.onclick = function () {
+        for (var index = 0; index < length; index += 1) {
+          buttons[index].style["cssFloat" in trigger.style ? "cssFloat" : "styleFloat"] = "left";
+        }
+      };
+    }
+
+  </script>
+</body>
+
+</html>
