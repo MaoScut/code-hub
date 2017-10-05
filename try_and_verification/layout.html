@@ -1,87 +1,140 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title></title>
 	<style type="text/css">
-	/*general*/
-		.container{
+		/*general*/
+
+		.container {
 			height: 100%;
 			width: 100%;
 			/*display: flex;*/
 		}
-		.left{
+
+		.left {
 			width: 300px;
 			height: 500px;
 			background: #333;
 		}
-		.right{
+
+		.right {
 			background-color: #444;
 		}
+		/*flex*/
 
-/*flex*/
-		.flex-container{
+		.flex-container {
 			display: flex;
 		}
-		.flex-right{
+
+		.flex-right {
 			flex: 1;
 		}
-
 		/*padding + margin*/
-		.pm-container{
+
+		.pm-container {
 			padding-left: 300px;
 			/*height: 500px;*/
 			box-sizing: border-box;
 		}
-		.pm-container::after{
+
+		.pm-container::after {
 			content: '';
 			clear: both;
 			display: block;
 		}
-		.pm-left{
+
+		.pm-left {
 			float: left;
 			margin-left: -100%;
 			position: relative;
 			left: -300px;
 		}
-		.pm-right{
+
+		.pm-right {
 			width: 100%;
 			height: 500px;
 			float: left;
 		}
 		/* container1 */
-		.container1{
+
+		.container1 {
 			width: 400px;
 		}
-		.container1 a{
+
+		.container1 a {
 			float: left;
 		}
-		.container1 span{
+
+		.container1 span {
 			word-wrap: break-word;
 			display: table-cell;
 		}
-		.cell{
+
+		.cell {
 			width: 100%;
 			/* float: left; */
 		}
+		.fixed-center{
+			width: 100%;
+			height: 600px;
+			position: relative;
+		}
+		.fixed-center .center{
+			width: 500px;
+			height: 100%;
+			background-color: seagreen;
+			margin: 0 auto;
+		}
+		.fc-left{
+			box-sizing: border-box;
+			position: absolute;
+			width: 50%;
+			height: 100%;
+			top: 0;
+			padding-right: 250px;
+		}
+		.fc-left div{
+			width: 100%;
+			height: 100%;
+			background-color: blue;
+		}
+		.fc-right{
+			box-sizing: border-box;
+			margin-left: 50%;
+			position: absolute;
+			width: 50%;
+			height: 100%;
+			top: 0;
+			padding-left: 250px;
+			/* left: 0; */
+		}
+		.fc-right div{
+			width: 100%;
+			height: 100%;
+			background-color: blue;
+		}
+
 	</style>
 </head>
+
 <body>
-1.use flex
-<div class="container flex-container">
-	<div class="left"></div>
-	<div class="right flex-right"></div>
-</div>
-2.padding + margin
-<div class="container pm-container">
-	<div class="right pm-right">right content</div>
-	<div class="left pm-left"></div>
-</div>
-<!-- 3.自适应，只需改变图片宽度，其他的不用变 -->
-<div class="container1">
-	<a href="">
+	1.use flex
+	<div class="container flex-container">
+		<div class="left"></div>
+		<div class="right flex-right"></div>
+	</div>
+	2.padding + margin
+	<div class="container pm-container">
+		<div class="right pm-right">right content</div>
+		<div class="left pm-left"></div>
+	</div>
+	<!-- 3.自适应，只需改变图片宽度，其他的不用变 -->
+	<div class="container1">
+		<a href="">
 			<img id="mibHeadImg" title="徐若瑄VIVIAN" src="http://img.mukewang.com/53e2e9470001dfd200500050.jpg" />
 	</a>
-	<span>
+		<span>
 			闲话不扯，书归正传。
 			
 			　　《css知多少》的读者建议是了解css基础知识（或者刚刚入门），但是没有系统学习、归纳、总结过的人，还有那些整天忙于coding、bug、加班当饭吃的，而没有时间去看书学习的码工们。《css知多少》里虽然内容不多，但是都是我觉得应该讲的基础，那些不需要讲的基础我就没有讲。所以，如果你是css大牛，那你不必看了（来给我指正一下我也欢迎啊！）；如果你css都没有入门，那你也不用看了，我是从来不会写入门教程的。
@@ -92,6 +145,17 @@
 			
 			　　最后，真诚的希望你能借助别人的力量来提高自己。我也一直在这样要求我自己。
 	</span>
-</div>
+	</div>
+	中间定宽，两边自适应
+	<div class="container fixed-center">
+		<div class="center"></div>
+		<div class="fc-left">
+			<div></div>
+		</div>
+		<div class="fc-right">
+			<div></div>
+		</div>
+	</div>
 </body>
+
 </html>
