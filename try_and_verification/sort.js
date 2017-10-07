@@ -217,4 +217,64 @@ function test(func) {
     console.log(`长度:${testArr.length},结果${testArr.every((v, index) => v === randomArr[index])}`);
   }
 }
-test(insertSort);
+test(heapSort);
+
+// 把某个点下降到适合的位置
+/**
+ * 
+ * @param {*} index 
+ * @param {*} arr 
+ * @param {*} len 
+ */
+// function siftDown(index, arr, len) {
+//   let i = index;
+//   const tmp = arr[index];
+//   let j = (2 * i) + 1;
+//   while (j < len) {
+//     if (arr[j + 1] && arr[j + 1] > arr[j]) j += 1;
+//     if (arr[j] > tmp) {
+//       arr[i] = arr[j];
+//       i = j;
+//       j = (2 * i) + 1;
+//     } else {
+//       break;
+//     }
+//   }
+//   arr[i] = tmp;
+// }
+// const t = [0, 1, 2, 3, 4];
+// const t = [7, 12, 25, 31, 14];
+
+// const end = Math.floor((t.length - 1) / 2 - 0.5);
+// for (let i = end; i >= 0; --i) {
+//   siftDown(i, t, 5);
+// }
+// console.log(t);
+function siftDown(index, arr, len) {
+  let i = index;
+  const tmp = arr[index];
+  let j = (2 * i) + 1;
+  while (j < len) {
+    if (j + 1 < len && arr[j + 1] > arr[j]) ++j;
+    if (arr[j] > tmp) {
+      arr[i] = arr[j];
+      i = j;
+      j = (2 * i) + 1;
+    } else break;
+  }
+  arr[i] = tmp;
+}
+function heapSort(arr) {
+  const end = Math.floor(((arr.length - 1) / 2) - 0.5);
+  for (let i = end; i >= 0; --i) {
+    siftDown(i, arr, arr.length);
+  }
+  let j = arr.length;
+  while (j > 0) {
+    const tmp = arr[0];
+    arr[0] = arr[j - 1];
+    arr[j - 1] = tmp;
+    siftDown(0, arr, j - 1);
+    --j;
+  }
+}
