@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .div1 {
+      position: absolute;
+      top: 180px;
+      left: 180px;
+      width: 500px;
+      height: 500px;
+      background: #E91616;
+      overflow: auto;
+      z-index: 10;
+      border: 20px solid green
+    }
+
+    .img1 {
+      position: absolute;
+      top: 200px;
+      left: 200px;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="div1">
+    <!-- 容器比图片多4px -->
+    <!-- 设置img为块级元素 -->
+    <!-- 或者是设置容器元素的fontSize为0 -->
+    <img style="display: block" src="../common/baiduPicture/8.jpg" alt="">
+  </div>
+  <img class="img1" src="../common/baiduPicture/8.jpg" alt="">
+  <div style="width:17px; height: 17px; background-color:#E91616" draggable="true"></div>
+</body>
+
+</html>
