@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .general {
+      border: 1px solid gold;
+    }
+
+    .div1 {
+      width: 500px;
+      height: 500px;
+      line-height: 500px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .div2 {
+      width: 500px;
+      height: 500px;
+      display: table-cell;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .son {
+      width: 200px;
+      height: 200px;
+      background-color: seagreen;
+    }
+
+    .div3 {
+      /* position: relative; */
+      width: 500px;
+      height: 500px;
+    }
+
+    .son3 {
+      position: relative;
+      top: 50%;
+      left: 50%;
+      margin-left: -100px;
+      margin-top: -100px;
+    }
+
+    .div4 {
+      width: 500px;
+      height: 500px;
+    }
+    .son4 {
+      position: relative;
+      margin: 0 auto;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  </style>
+</head>
+
+<body>
+  <p>
+    当你想在两个方向去居中某个元素的时候，你要问问自己
+  </p>
+  <p>父元素浮动吗？</p>
+  <p>父元素尺寸知道？</p>
+  <p>子元素尺寸？是块级吗？</p>
+  <div class="general div1">
+    <span>父元素不浮动，高度已知，子元素是内联</span>
+  </div>
+  <div class="general div2">
+    <span>父元素不浮动，高度未知，子元素是内联</span>
+  </div>
+  <div class="general div3">
+    <div class="son son3">父元素不浮动，高度固定，子元素是块级，高度固定</div>
+  </div>
+  <div class="general div4">
+    <div class="son son4">父元素不浮动，高度不固定，子元素是块级，高度不固定（水平方向请用margin去居中）</div>
+  </div>
+</body>
+
+</html>
